@@ -1,63 +1,63 @@
 // --- 1. Multi-Language Dictionary ---
 const translations = {
     en: {
-        title: "Welcome to YOYO Our Wedding",
-        locTitle: "Locations",
-        churchTitle: "The Church",
-        churchDesc: "St. Mary's Cathedral, 123 Wedding Ave.",
-        venueTitle: "The Venue",
-        venueDesc: "Grand Party Hall, 456 Celebration St.",
+        subtitle: "Are getting married",
+        locTitle: "The Day",
+        churchTitle: "The Ceremony",
+        churchDesc: "St. Mary's Cathedral, 123 Wedding Ave. Starting at 11:00 AM.",
+        venueTitle: "The Party",
+        venueDesc: "Grand Villa Resort, 456 Celebration St. Dinner and dancing to follow.",
         giftsTitle: "Gifts & Registry",
-        giftsDesc: "Your presence is the greatest gift. If you wish to give...",
+        giftsDesc: "Your presence is the greatest gift. If you wish to contribute to our honeymoon, you can use the details below:",
         rsvpTitle: "RSVP",
-        labelName: "Name:",
-        labelAttending: "Will you attend?",
-        optYes: "Yes",
-        optNo: "No",
-        btnSubmit: "Send RSVP",
+        labelName: "Full Name",
+        labelAttending: "Will you join us?",
+        optYes: "Yes, I'll be there!",
+        optNo: "No, I can't make it",
+        btnSubmit: "Confirm RSVP",
         qrMatch: "Welcome, "
     },
     it: {
-        title: "Benvenuti al nostro Matrimonio",
-        locTitle: "Luoghi",
-        churchTitle: "La Chiesa",
-        churchDesc: "Cattedrale di Santa Maria, Via delle Nozze 123.",
+        subtitle: "Si sposano",
+        locTitle: "Il Grande Giorno",
+        churchTitle: "La Cerimonia",
+        churchDesc: "Cattedrale di Santa Maria, Via delle Nozze 123. Inizio ore 11:00.",
         venueTitle: "Il Ricevimento",
-        venueDesc: "Villa Grande, Via dei Festeggiamenti 456.",
-        giftsTitle: "Regali",
-        giftsDesc: "La vostra presenza è il regalo più grande...",
+        venueDesc: "Grand Villa Resort, Via dei Festeggiamenti 456. Seguiranno cena e balli.",
+        giftsTitle: "Lista Nozze",
+        giftsDesc: "La vostra presenza è il dono più bello. Se desiderate contribuire alla nostra luna di miele, potete utilizzare i dati qui sotto:",
         rsvpTitle: "Conferma Presenza",
-        labelName: "Nome:",
+        labelName: "Nome Completo",
         labelAttending: "Ci sarai?",
-        optYes: "Sì",
-        optNo: "No",
-        btnSubmit: "Invia",
-        qrMatch: "Benvenuto, "
+        optYes: "Sì, ci sarò!",
+        optNo: "No, non potrò esserci",
+        btnSubmit: "Conferma",
+        qrMatch: "Benvenuto/a, "
     },
     pl: {
-        title: "Witamy na naszym ślubie",
-        locTitle: "Lokalizacje",
-        churchTitle: "Kościół",
-        churchDesc: "Katedra Mariacka, ul. Ślubna 123.",
+        subtitle: "Biorą ślub",
+        locTitle: "Nasz Dzień",
+        churchTitle: "Ceremonia",
+        churchDesc: "Katedra Mariacka, ul. Ślubna 123. Początek o 11:00.",
         venueTitle: "Wesele",
-        venueDesc: "Wielka Sala, ul. Uroczysta 456.",
+        venueDesc: "Grand Villa Resort, ul. Uroczysta 456. Zapraszamy na obiad i tańce.",
         giftsTitle: "Prezenty",
-        giftsDesc: "Twoja obecność jest największym prezentem...",
+        giftsDesc: "Wasza obecność jest dla nas najważniejsza. Jeśli chcecie wesprzeć naszą podróż poślubną, poniżej znajdują się dane:",
         rsvpTitle: "RSVP",
-        labelName: "Imię:",
-        labelAttending: "Czy będziesz?",
-        optYes: "Tak",
-        optNo: "Nie",
-        btnSubmit: "Wyślij",
-        qrMatch: "Witaj, "
+        labelName: "Imię i Nazwisko",
+        labelAttending: "Czy będziesz z nami?",
+        optYes: "Tak, z przyjemnością!",
+        optNo: "Niestety nie mogę",
+        btnSubmit: "Potwierdź",
+        qrMatch: "Witamy, "
     }
 };
 
-let currentLang = 'en';
+let currentLang = 'en'; // Default language
 
 function setLang(lang) {
     currentLang = lang;
-    document.getElementById('title').innerText = translations[lang].title;
+    document.getElementById('subtitle').innerText = translations[lang].subtitle;
     document.getElementById('loc-title').innerText = translations[lang].locTitle;
     document.getElementById('church-title').innerText = translations[lang].churchTitle;
     document.getElementById('church-desc').innerText = translations[lang].churchDesc;
@@ -73,20 +73,23 @@ function setLang(lang) {
     document.getElementById('btn-submit').innerText = translations[lang].btnSubmit;
 }
 
-// --- 2. QR Code Mechanism ---
-// QR codes should link to: https://yourusername.github.io/repo/?guestId=JOHN_DOE
+// --- 2. QR Code & URL Parameter Mechanism ---
+// Example link: https://yourusername.github.io/repo/?guestId=Mario_Rossi
 window.onload = () => {
     const urlParams = new URLSearchParams(window.location.search);
     const guestId = urlParams.get('guestId');
 
     if (guestId) {
-        // Fill the hidden input and the name input automatically
-        document.getElementById('guest-id').value = guestId;
-        document.getElementById('name').value = guestId.replace(/_/g, ' ');
+        const formattedName = guestId.replace(/_/g, ' ');
 
+        // Fill the hidden input and the visible name input automatically
+        document.getElementById('guest-id').value = guestId;
+        document.getElementById('name').value = formattedName;
+
+        // Show personalized welcome message
         const welcomeText = document.getElementById('qr-welcome');
         welcomeText.style.display = 'block';
-        welcomeText.innerText = translations[currentLang].qrMatch + guestId.replace(/_/g, ' ') + "!";
+        welcomeText.innerText = translations[currentLang].qrMatch + formattedName + "!";
     }
 };
 
@@ -94,18 +97,27 @@ window.onload = () => {
 const form = document.getElementById('rsvp-form');
 form.addEventListener('submit', e => {
     e.preventDefault();
-    document.getElementById('btn-submit').innerText = "Sending...";
 
-    // REPLACE THIS URL with your Google Apps Script Web App URL (Step 2)
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbxTuLYjlRvPnH-CYdnqk_-_MOtR2YLDi_A1VmJQIzzbSIN2B3szX6IUDwhkPW48iJ_miA/exec';
+    const submitBtn = document.getElementById('btn-submit');
+    submitBtn.innerText = "Sending...";
+    submitBtn.style.backgroundColor = "#aaa";
+    submitBtn.disabled = true;
+
+    // REPLACE THIS URL with your Google Apps Script Web App URL from Step 2
+    const scriptURL = 'YOUR_GOOGLE_SCRIPT_WEB_APP_URL_HERE';
 
     fetch(scriptURL, { method: 'POST', body: new FormData(form) })
         .then(response => {
+            document.getElementById('form-message').style.color = "#7d9081";
             document.getElementById('form-message').innerText = "RSVP Saved! Thank you.";
-            document.getElementById('btn-submit').style.display = 'none';
+            submitBtn.style.display = 'none';
         })
         .catch(error => {
-            document.getElementById('form-message').innerText = "Error saving RSVP.";
+            document.getElementById('form-message').style.color = "red";
+            document.getElementById('form-message').innerText = "Error saving RSVP. Please try again.";
+            submitBtn.innerText = translations[currentLang].btnSubmit;
+            submitBtn.style.backgroundColor = "var(--primary)";
+            submitBtn.disabled = false;
             console.error('Error!', error.message);
         });
-}); 
+});
