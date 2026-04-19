@@ -107,7 +107,7 @@ function startSlider(id) {
     sliders[id].int = setInterval(() => {
         sliders[id].idx = (sliders[id].idx + 1) % count;
         el.scrollTo({ left: el.clientWidth * sliders[id].idx, behavior: 'smooth' });
-    }, 3000);
+    }, 6000);
 }
 
 function stopSlider(id) { clearInterval(sliders[id].int); }
