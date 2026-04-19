@@ -1,0 +1,149 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:ital@0;1&family=Montserrat:wght@300;400&display=swap');
+
+:root {
+    --primary: #8da491;
+    /* Sage Green */
+    --accent: #d4af37;
+    /* Gold */
+    --text: #444;
+    --bg: #fdfbf7;
+}
+
+body {
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    scroll-behavior: smooth;
+}
+
+h1,
+h2,
+h3 {
+    font-family: 'Playfair Display', serif;
+}
+
+/* HERO SECTION */
+.hero-section {
+    position: relative;
+    height: 100vh;
+    background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+        url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1920&q=80');
+    /* Placeholder Background */
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    /* Parallax effect */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+}
+
+.hero-content h1 {
+    font-size: 4rem;
+    font-family: 'Dancing Script', cursive;
+    margin-bottom: 10px;
+}
+
+/* LANGUAGE SWITCHER */
+.lang-switcher {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.lang-switcher button {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.lang-switcher button:hover {
+    background: var(--primary);
+    color: white;
+}
+
+/* CONTENT SECTIONS */
+.content-section {
+    padding: 80px 20px;
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.section-title {
+    font-size: 2.5rem;
+    color: var(--primary);
+    margin-bottom: 40px;
+}
+
+/* CARDS & IMAGES */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background: white;
+    padding: 0 0 20px 0;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    background: #eee;
+    /* Placeholder if image fails */
+}
+
+.card-padding {
+    padding: 20px;
+}
+
+/* RSVP FORM */
+#rsvp-section {
+    background-color: #f4f7f4;
+    border-radius: 20px;
+    margin-bottom: 50px;
+}
+
+#rsvp-form {
+    display: flex;
+    flex-direction: column;
+    max-width: 500px;
+    margin: 0 auto;
+    gap: 15px;
+    text-align: left;
+}
+
+input,
+select {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button[type="submit"] {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 15px;
+    font-size: 1.1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button[type="submit"]:hover {
+    background: #6e8372;
+}
