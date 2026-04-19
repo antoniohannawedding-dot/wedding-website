@@ -4,10 +4,10 @@ const translations = {
         locTitle: "The Day",
         churchTitle: "The Ceremony",
         churchDesc: "Santa Maria della Pietà. Starting at 4:00 PM.",
-        churchHistory: "A 17th-century Sicilian Baroque masterpiece in the Kalsa district, designed by Giacomo Amato.",
-        venueTitle: "The Party",
-        venueDesc: "Baglio Culluzia, Via Funnuta 9. Dinner and dancing to follow.",
-        venueHistory: "An 18th-century noble estate in the Conca d'Oro. Its halls are restored historic stables.",
+        churchHistory: "The Church of Santa Maria della Pietà is located in the heart of the Kalsa district in Palermo, along the historic Via Alloro. Built between the late 17th and early 18th centuries and designed by the architect Giacomo Amato, it is a splendid example of Baroque architecture. The church is notable for its majestic two-tier facade, adorned with imposing columns and statues. Inside, the spacious single nave houses precious frescoes, elegant stuccoes, and rich marble decorations typical of the Sicilian Baroque style.",
+        venueTitle: "The Venue",
+        venueDesc: "Baglio Culluzia, Via Funnuta 9.",
+        venueHistory: "Baglio Culluzia is an 18th-century noble residence located just outside Palermo. The estate is part of the heritage of historic villas in the Conca d'Oro. The indoor hall was converted from an ancient stable, and the spaces have been restored while preserving the original features of the era in which it was built.",
         giftsTitle: "Gifts & Registry",
         giftsDesc: "Your presence is the greatest gift. If you wish to contribute to our honeymoon, use the details below:",
         rsvpTitle: "RSVP",
@@ -17,6 +17,8 @@ const translations = {
         optNo: "No, I can't make it",
         btnSubmit: "Confirm RSVP",
         btnHist: "View History",
+        btnCopy: "Copy",
+        copied: "Copied!",
         qrMatch: "Welcome, "
     },
     it: {
@@ -24,10 +26,10 @@ const translations = {
         locTitle: "Il Grande Giorno",
         churchTitle: "La Cerimonia",
         churchDesc: "Santa Maria della Pietà. Inizio ore 16:00.",
-        churchHistory: "Capolavoro del barocco siciliano del XVII secolo nel quartiere Kalsa, progettato da Giacomo Amato.",
+        churchHistory: "La Chiesa di Santa Maria della Pietà si trova nel cuore del quartiere Kalsa a Palermo, lungo la storica Via Alloro. Costruita tra la fine del XVII e l'inizio del XVIII secolo su progetto dell'architetto Giacomo Amato, è uno splendido esempio di architettura barocca. La chiesa si distingue per la sua maestosa facciata a due ordini, arricchita da imponenti colonne e statue. All'interno, l'ampia navata unica custodisce preziosi affreschi, eleganti stucchi e ricche decorazioni marmoree tipiche del barocco siciliano.",
         venueTitle: "Il Ricevimento",
-        venueDesc: "Baglio Culluzia, Via Funnuta 9. Seguiranno cena e balli.",
-        venueHistory: "Dimora nobiliare del 1700 situata nella Conca d'Oro con antiche scuderie ristrutturate.",
+        venueDesc: "Baglio Culluzia, Via Funnuta 9.",
+        venueHistory: "Baglio Culluzia è una dimora nobiliare del 1700 situata alle porte di Palermo. La tenuta fa parte del patrimonio di ville storiche della Conca D’oro. La sala interna è stata ricavata da un’antica scuderia, gli spazi sono stati",
         giftsTitle: "Lista Nozze",
         giftsDesc: "La vostra presenza è il dono più grande. Se desiderate contribuire alla luna di miele:",
         rsvpTitle: "Conferma Presenza",
@@ -37,6 +39,8 @@ const translations = {
         optNo: "No, non potrò esserci",
         btnSubmit: "Conferma",
         btnHist: "Vedi Storia",
+        btnCopy: "Copia",
+        copied: "Copiato!",
         qrMatch: "Benvenuto/a, "
     },
     pl: {
@@ -44,10 +48,10 @@ const translations = {
         locTitle: "Nasz Dzień",
         churchTitle: "Ceremonia",
         churchDesc: "Santa Maria della Pietà. Początek o 16:00.",
-        churchHistory: "XVII-wieczne arcydzieło sycylijskiego baroku w dzielnicy Kalsa.",
-        venueTitle: "Wesele",
-        venueDesc: "Baglio Culluzia, ul. Funnuta 9. Zapraszamy na kolację i tańce.",
-        venueHistory: "XVIII-wieczna szlachecka posiadłość w Conca d'Oro.",
+        churchHistory: "Kościół Santa Maria della Pietà znajduje się w samym sercu dzielnicy Kalsa w Palermo, przy historycznej ulicy Via Alloro. Zbudowany na przełomie XVII i XVIII wieku według projektu architekta Giacomo Amato, jest wspaniałym przykładem architektury barokowej. Kościół wyróżnia się majestatyczną, dwukondygnacyjną fasadą ozdobioną potężnymi kolumnami i posągami. W jego przestronnym, jednonawowym wnętrzu kryją się cenne freski, eleganckie sztukaterie oraz bogate marmurowe dekoracje, które są charakterystyczne dla sycylijskiego baroku.",
+        venueTitle: "Przyjęcie Wesele",
+        venueDesc: "Baglio Culluzia, ul. Funnuta 9.",
+        venueHistory: "Baglio Culluzia to XVIII-wieczna rezydencja szlachecka położona na obrzeżach Palermo. Posiadłość jest częścią dziedzictwa historycznych willi w dolinie Conca d'Oro. Wewnętrzna sala została zaadaptowana z dawnej stajni, a przestrzenie odrestaurowano, zachowując w niezmienionej formie oryginalne cechy z epoki, w której budynek został wzniesiony.",
         giftsTitle: "Prezenty",
         giftsDesc: "Wasza obecność jest najważniejsza. Jeśli chcecie wesprzeć naszą podróż:",
         rsvpTitle: "RSVP",
@@ -57,6 +61,8 @@ const translations = {
         optNo: "Niestety nie mogę",
         btnSubmit: "Potwierdź",
         btnHist: "Zobacz historię",
+        btnCopy: "Kopiuj",
+        copied: "Skopiowano!",
         qrMatch: "Witaj, "
     }
 };
@@ -66,6 +72,7 @@ let currentLang = 'en';
 function setLang(lang) {
     currentLang = lang;
     const t = translations[lang];
+
     document.getElementById('subtitle').innerText = t.subtitle;
     document.getElementById('loc-title').innerText = t.locTitle;
     document.getElementById('church-title').innerText = t.churchTitle;
@@ -84,6 +91,23 @@ function setLang(lang) {
     document.getElementById('btn-submit').innerText = t.btnSubmit;
     document.getElementById('btn-hist-church').innerText = t.btnHist;
     document.getElementById('btn-hist-venue').innerText = t.btnHist;
+    document.getElementById('btn-copy').innerText = t.btnCopy;
+    document.getElementById('copy-confirm').innerText = t.copied;
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const guestId = urlParams.get('guestId');
+    if (guestId) {
+        document.getElementById('qr-welcome').innerText = t.qrMatch + guestId.replace(/_/g, ' ') + "!";
+    }
+}
+
+function copyIban() {
+    const text = document.getElementById('iban-text').innerText;
+    navigator.clipboard.writeText(text).then(() => {
+        const toast = document.getElementById('copy-confirm');
+        toast.style.opacity = '1';
+        setTimeout(() => { toast.style.opacity = '0'; }, 2000);
+    });
 }
 
 function toggleHistory(id) {
@@ -91,11 +115,7 @@ function toggleHistory(id) {
     div.style.display = (div.style.display === 'block') ? 'none' : 'block';
 }
 
-// ROBUST SLIDER LOGIC
-let sliders = {
-    church: { int: null, idx: 0 },
-    venue: { int: null, idx: 0 }
-};
+let sliders = { church: { int: null, idx: 0 }, venue: { int: null, idx: 0 } };
 
 function startSlider(id) {
     const el = document.getElementById('gallery-' + id);
@@ -107,7 +127,7 @@ function startSlider(id) {
     sliders[id].int = setInterval(() => {
         sliders[id].idx = (sliders[id].idx + 1) % count;
         el.scrollTo({ left: el.clientWidth * sliders[id].idx, behavior: 'smooth' });
-    }, 6000);
+    }, 5000);
 }
 
 function stopSlider(id) { clearInterval(sliders[id].int); }
@@ -125,12 +145,11 @@ window.addEventListener('load', () => {
     if (guestId) {
         document.getElementById('guest-id').value = guestId;
         document.getElementById('name').value = guestId.replace(/_/g, ' ');
-        document.getElementById('qr-welcome').innerText = translations[currentLang].qrMatch + guestId.replace(/_/g, ' ') + "!";
         document.getElementById('qr-welcome').style.display = 'block';
     }
+    setLang('en');
     startSlider('church');
     startSlider('venue');
-    setLang('en');
 });
 
 document.getElementById('rsvp-form').addEventListener('submit', e => {
@@ -139,6 +158,12 @@ document.getElementById('rsvp-form').addEventListener('submit', e => {
     btn.innerText = "Sending...";
     btn.disabled = true;
     fetch('YOUR_SCRIPT_URL', { method: 'POST', body: new FormData(e.target) })
-        .then(() => { document.getElementById('form-message').innerText = "Sent!"; btn.style.display = 'none'; })
-        .catch(() => { document.getElementById('form-message').innerText = "Error!"; btn.disabled = false; });
+        .then(() => {
+            document.getElementById('form-message').innerText = "Sent! Thank you.";
+            btn.style.display = 'none';
+        })
+        .catch(() => {
+            document.getElementById('form-message').innerText = "Error. Please try again.";
+            btn.disabled = false;
+        });
 });
