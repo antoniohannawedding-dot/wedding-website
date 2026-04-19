@@ -125,3 +125,39 @@ form.addEventListener('submit', e => {
             btn.innerText = translations[currentLang].btnSubmit;
         });
 });
+
+// --- Gallery Slider Logic ---
+let sliders = {
+    church: { interval: null, index: 0 },
+    venue: { interval: null, index: 0 }
+};
+
+function startSlider(id) {
+    const gallery = document.getElementById('gallery-' + id);
+    const images = gallery.querySelectorAll('img');
+
+    sliders[id].interval = setInterval(() => {
+        sliders[id].index++;
+        if (sliders[id].index >= images.size) {
+            sliders[id].index = 0;
+        }
+
+        // Smoothly scroll to the next image
+        gallery.scrollTo({
+            left: gallery.offsetWidth * sliders[id].index,
+            behavior: 'smooth'
+        });
+    }, 3000); // Change image every 3 seconds
+}
+
+function stopSlider(id) {
+    clearInterval(sliders[id].interval);
+}
+
+// Update the window.onload to start sliders automatically
+const originalOnLoad = window.onload;
+window.onload = () => {
+    if (originalOnLoad) originalOnLoad();
+    startSlider('church');
+    startSlider('venue');
+};
