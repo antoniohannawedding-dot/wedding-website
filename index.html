@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Wedding</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="hero-section">
+        <div class="lang-switcher">
+            <button onclick="setLang('en')">EN</button>
+            <button onclick="setLang('it')">IT</button>
+            <button onclick="setLang('pl')">PL</button>
+        </div>
+        <h1 id="title">Welcome to Our Wedding</h1>
+        <p id="date">August 15, 2027</p>
+    </div>
+
+    <section id="locations" class="content-section">
+        <h2 id="loc-title">Locations</h2>
+        <div class="card">
+            <h3 id="church-title">The Church</h3>
+            <p id="church-desc">St. Mary's Cathedral, 123 Wedding Ave.</p>
+        </div>
+        <div class="card">
+            <h3 id="venue-title">The Venue</h3>
+            <p id="venue-desc">Grand Party Hall, 456 Celebration St.</p>
+        </div>
+    </section>
+
+    <section id="presents" class="content-section">
+        <h2 id="gifts-title">Gifts & Registry</h2>
+        <p id="gifts-desc">Your presence is the greatest gift. If you wish to give, here are our details...</p>
+    </section>
+
+    <section id="rsvp-section" class="content-section">
+        <h2 id="rsvp-title">RSVP</h2>
+        <p id="qr-welcome" style="display:none; color: green; font-weight: bold;"></p>
+
+        <form id="rsvp-form">
+            <input type="hidden" id="guest-id" name="guestId">
+
+            <label id="label-name" for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label id="label-attending" for="attending">Will you attend?</label>
+            <select id="attending" name="attending" required>
+                <option value="yes" id="opt-yes">Yes</option>
+                <option value="no" id="opt-no">No</option>
+            </select>
+
+            <button type="submit" id="btn-submit">Send RSVP</button>
+        </form>
+        <p id="form-message"></p>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
