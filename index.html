@@ -41,7 +41,7 @@
                 </div>
                 <div class="card-content">
                     <h3 id="church-title">The Ceremony</h3>
-                    <p id="church-desc">Santa Maria della Pietà. Starting at 4:00 PM.\n\n</p>
+                    <p id="church-desc">Santa Maria della Pietà. Starting at 4:00 PM.</p>
                     <button class="btn-history" id="btn-hist-church" onclick="toggleHistory('church')">View
                         History</button>
                     <div id="history-church" class="history-content">
@@ -49,16 +49,16 @@
                     </div>
                     <div class="map-container">
                         <iframe
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3152.327599723048!2d13.36979237657519!3d38.11306359218671!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1319e52edf184e8b%3A0x58413da94c6fae86!2sSanta%20Maria%20della%20Piet%C3%A0!5e0!3m2!1sit!2sit!4v1700000000000!5m2!1sit!2sit"
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3151.7240366627!2d13.3678!3d38.1157!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzjCsDA2JzU2LjUiTiAxM8KwMjInMDQuMSJF!5e0!3m2!1sen!2sit!4v1650000000000"
                             width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
                     </div>
                 </div>
             </div>
             <div class="card" onmouseenter="stopSlider('venue')" onmouseleave="startSlider('venue')">
                 <div class="gallery" id="gallery-venue">
-                    <img src="baglio_colluzia.jpeg"  alt="Baglio Culluzia Exterior">
+                    <img src="baglio_colluzia.jpeg" alt="Baglio Culluzia Exterior">
                     <img src="baglio_colluzia1.jpeg" alt="Baglio Culluzia Exterior">
-                    <img src="baglio_colluzia2.png"  alt="Baglio Culluzia Exterior">
+                    <img src="baglio_colluzia2.png" alt="Baglio Culluzia Exterior">
                     <img src="baglio_colluzia3.jpeg" alt="Baglio Culluzia Exterior">
                 </div>
                 <div class="card-content">
@@ -71,7 +71,7 @@
                     </div>
                     <div class="map-container">
                         <iframe
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3152.9641777227443!2d13.411646276574482!3d38.094553492985165!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1319e4f06fd9a1c1%3A0x6e7f0736b3c1a18a!2sBaglio%20Culluzia!5e0!3m2!1sit!2sit!4v1700000000001!5m2!1sit!2sit"
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3152.0234!2d13.3!3d38.1!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzjCsDA2JzU2LjUiTiAxM8KwMjInMDQuMSJF!5e0!3m2!1sen!2sit!4v1650000000000"
                             width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
                     </div>
                 </div>
@@ -96,23 +96,25 @@
 
     <section id="rsvp-section" class="content-section">
         <h2 class="section-title" id="rsvp-title">RSVP</h2>
-        <p id="qr-welcome" class="welcome-message"></p>
-        <form id="rsvp-form">
-            <input type="hidden" id="guest-id" name="guestId">
-            <div class="form-group">
-                <label id="label-name" for="name">Full Name</label>
-                <input type="text" id="name" name="name" required>
+
+        <div id="manual-id-entry"
+            style="display: none; max-width: 450px; margin: 0 auto 30px; background: var(--bg-card); padding: 30px; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.05); text-align: left;">
+            <p id="no-id-text" style="margin-bottom: 20px; font-size: 0.95rem;"></p>
+            <div style="display: flex; gap: 10px;">
+                <input type="text" id="manual-id-input" placeholder="ID (e.g. 4)" style="flex: 1;">
+                <button class="btn-history" id="btn-manual-go" onclick="handleManualId()"
+                    style="margin: 0; padding: 0 25px; white-space: nowrap;">Go</button>
             </div>
-            <div class="form-group">
-                <label id="label-attending" for="attending">Will you join us?</label>
-                <select id="attending" name="attending" required>
-                    <option value="" disabled selected id="opt-select">Select...</option>
-                    <option value="yes" id="opt-yes">Yes!</option>
-                    <option value="no" id="opt-no">No</option>
-                </select>
-            </div>
+        </div>
+
+        <p id="qr-welcome" class="welcome-message" style="display: none;"></p>
+        <p id="loading-message"
+            style="display: none; font-style: italic; color: var(--primary-dark); margin-bottom: 20px;"></p>
+
+        <form id="rsvp-form" style="display: none;">
+            <div id="family-container"></div>
             <button type="submit" id="btn-submit">Confirm RSVP</button>
-            <p id="form-message"></p>
+            <p id="form-message" style="margin-top: 20px; font-weight: 500;"></p>
         </form>
     </section>
 

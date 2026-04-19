@@ -1,3 +1,6 @@
+// 1. CONFIGURATION
+// Replace this with the URL you got from "Deploy > New Deployment" in Google Apps Script
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwJ_uiKs-OGsgULvSv2SXEsXAP6lADfJEU7mLiq7En9bhsauU4hHXLqLDfC4bAzs0-uHQ/exec';
 const translations = {
     en: {
         subtitle: "Are getting married",
@@ -19,7 +22,14 @@ const translations = {
         btnHist: "View History",
         btnCopy: "Copy",
         copied: "Copied!",
-        qrMatch: "Welcome, "
+        qrMatch: "Welcome, ",
+        loading: "Loading your invitation details...",
+        dietLabel: "Dietary Restrictions / Intolerances",
+        dietPlaceholder: "e.g., Gluten-free, Peanuts, None",
+        sent: "Sent! Thank you.",
+        error: "Error. Please try again.",
+        noId: "If your QR code didn't work, please enter the ID from your invitation:",
+        btnGo: "Go"
     },
     it: {
         subtitle: "Si sposano",
@@ -41,7 +51,14 @@ const translations = {
         btnHist: "Vedi Storia",
         btnCopy: "Copia",
         copied: "Copiato!",
-        qrMatch: "Benvenuto/a, "
+        qrMatch: "Benvenuto/a, ",
+        loading: "Caricamento dettagli invito...",
+        dietLabel: "Intolleranze / Restrizioni alimentari",
+        dietPlaceholder: "es. Glutine, Lattosio, Nessuna",
+        sent: "Inviato! Grazie.",
+        error: "Errore. Riprova più tardi.",
+        noId: "Se il codice QR non funziona, inserisci l'ID del tuo invito:",
+        btnGo: "Vai"
     },
     pl: {
         subtitle: "Biorą ślub",
@@ -63,12 +80,21 @@ const translations = {
         btnHist: "Zobacz historię",
         btnCopy: "Kopiuj",
         copied: "Skopiowano!",
-        qrMatch: "Witaj, "
+        qrMatch: "Witaj, ",
+        loading: "Ładowanie szczegółów zaproszenia...",
+        dietLabel: "Alergie / Intolerancje pokarmowe",
+        dietPlaceholder: "np. gluten, orzechy, brak",
+        sent: "Wysłano! Dziękujemy.",
+        error: "Błąd. Spróbuj ponownie.",
+        noId: "Jeśli kod QR nie działa, wpisz numer ID z zaproszenia:",
+        btnGo: "OK"
     }
 };
 
 let currentLang = 'en';
+let currentFamilyData = [];
 
+// 2. LANGUAGE SWITCHER
 function setLang(lang) {
     currentLang = lang;
     const t = translations[lang];
@@ -84,23 +110,129 @@ function setLang(lang) {
     document.getElementById('gifts-title').innerText = t.giftsTitle;
     document.getElementById('gifts-desc').innerText = t.giftsDesc;
     document.getElementById('rsvp-title').innerText = t.rsvpTitle;
-    document.getElementById('label-name').innerText = t.labelName;
-    document.getElementById('label-attending').innerText = t.labelAttending;
-    document.getElementById('opt-yes').innerText = t.optYes;
-    document.getElementById('opt-no').innerText = t.optNo;
     document.getElementById('btn-submit').innerText = t.btnSubmit;
     document.getElementById('btn-hist-church').innerText = t.btnHist;
     document.getElementById('btn-hist-venue').innerText = t.btnHist;
     document.getElementById('btn-copy').innerText = t.btnCopy;
     document.getElementById('copy-confirm').innerText = t.copied;
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const guestId = urlParams.get('guestId');
-    if (guestId) {
-        document.getElementById('qr-welcome').innerText = t.qrMatch + guestId.replace(/_/g, ' ') + "!";
+    // Update conditional manual entry texts
+    if (document.getElementById('no-id-text')) {
+        document.getElementById('no-id-text').innerText = t.noId;
+    }
+    if (document.getElementById('btn-manual-go')) {
+        document.getElementById('btn-manual-go').innerText = t.btnGo;
+    }
+    if (document.getElementById('loading-message')) {
+        document.getElementById('loading-message').innerText = t.loading;
+    }
+
+    if (currentFamilyData.length > 0) renderFamilyForm(currentFamilyData);
+}
+
+// 3. FETCHING DATA
+function fetchGuestData(guestId) {
+    const loadMsg = document.getElementById('loading-message');
+    loadMsg.style.display = 'block';
+
+    fetch(SCRIPT_URL + "?guestId=" + guestId)
+        .then(response => response.json())
+        .then(data => {
+            if (!data.family || data.family.length === 0) {
+                loadMsg.innerText = translations[currentLang].error + " (ID not found)";
+                document.getElementById('manual-id-entry').style.display = 'block';
+                return;
+            }
+
+            currentFamilyData = data.family;
+
+            // Set language from sheet if available
+            if (data.lang && translations[data.lang]) setLang(data.lang);
+
+            loadMsg.style.display = 'none';
+            document.getElementById('manual-id-entry').style.display = 'none';
+            document.getElementById('rsvp-form').style.display = 'block';
+
+            const t = translations[currentLang];
+            document.getElementById('qr-welcome').innerText = t.qrMatch + currentFamilyData[0].name + "!";
+            document.getElementById('qr-welcome').style.display = 'block';
+            renderFamilyForm(currentFamilyData);
+        })
+        .catch(() => {
+            loadMsg.innerText = translations[currentLang].error;
+            document.getElementById('manual-id-entry').style.display = 'block';
+        });
+}
+
+function handleManualId() {
+    const manualId = document.getElementById('manual-id-input').value.trim();
+    if (manualId) {
+        document.getElementById('manual-id-entry').style.display = 'none';
+        fetchGuestData(manualId);
     }
 }
 
+// 4. DYNAMIC FORM
+function renderFamilyForm(family) {
+    const container = document.getElementById('family-container');
+    const t = translations[currentLang];
+    container.innerHTML = '';
+
+    family.forEach((person, index) => {
+        const personDiv = document.createElement('div');
+        personDiv.className = 'form-group';
+        personDiv.style.borderBottom = "1px solid #eee";
+        personDiv.style.paddingBottom = "20px";
+        personDiv.style.marginBottom = "20px";
+
+        personDiv.innerHTML = `
+            <h4 style="font-family:'Playfair Display', serif; margin-bottom: 10px; color: var(--primary-dark);">${person.name}</h4>
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                <input type="checkbox" id="attend-${index}" style="width: 20px; height: 20px;">
+                <label for="attend-${index}" style="margin-bottom: 0;">${t.optYes}</label>
+            </div>
+            <label style="font-size: 0.8rem; color: #666;">${t.dietLabel}</label>
+            <input type="text" id="intol-${index}" placeholder="${t.dietPlaceholder}">
+        `;
+        container.appendChild(personDiv);
+    });
+}
+
+// 5. SUBMIT RSVP
+document.getElementById('rsvp-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const btn = document.getElementById('btn-submit');
+    const t = translations[currentLang];
+
+    btn.innerText = "Sending...";
+    btn.disabled = true;
+
+    const responses = currentFamilyData.map((person, index) => ({
+        row: person.row,
+        name: person.name,
+        attending: document.getElementById(`attend-${index}`).checked,
+        intolerances: document.getElementById(`intol-${index}`).value
+    }));
+
+    fetch(SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ responses: responses })
+    })
+        .then(res => res.json())
+        .then(() => {
+            document.getElementById('form-message').innerText = t.sent;
+            btn.style.display = 'none';
+            document.getElementById('family-container').style.display = 'none';
+        })
+        .catch(() => {
+            document.getElementById('form-message').innerText = t.error;
+            btn.innerText = t.btnSubmit;
+            btn.disabled = false;
+        });
+});
+
+// 6. UTILITIES (IBAN, HISTORY, SLIDERS)
 function copyIban() {
     const text = document.getElementById('iban-text').innerText;
     navigator.clipboard.writeText(text).then(() => {
@@ -116,54 +248,38 @@ function toggleHistory(id) {
 }
 
 let sliders = { church: { int: null, idx: 0 }, venue: { int: null, idx: 0 } };
-
 function startSlider(id) {
     const el = document.getElementById('gallery-' + id);
     if (!el) return;
     const count = el.querySelectorAll('img').length;
-    if (count <= 1) return;
-
     clearInterval(sliders[id].int);
     sliders[id].int = setInterval(() => {
         sliders[id].idx = (sliders[id].idx + 1) % count;
         el.scrollTo({ left: el.clientWidth * sliders[id].idx, behavior: 'smooth' });
     }, 5000);
 }
-
 function stopSlider(id) { clearInterval(sliders[id].int); }
+
+// 7. INIT
+window.addEventListener('load', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const guestId = urlParams.get('guestId');
+
+    setLang('en');
+    startSlider('church');
+    startSlider('venue');
+
+    if (guestId) {
+        fetchGuestData(guestId);
+    } else {
+        document.getElementById('manual-id-entry').style.display = 'block';
+        document.getElementById('no-id-text').innerText = translations[currentLang].noId;
+    }
+});
 
 window.addEventListener('resize', () => {
     ['church', 'venue'].forEach(id => {
         const el = document.getElementById('gallery-' + id);
         if (el) el.scrollTo({ left: el.clientWidth * sliders[id].idx });
     });
-});
-
-window.addEventListener('load', () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const guestId = urlParams.get('guestId');
-    if (guestId) {
-        document.getElementById('guest-id').value = guestId;
-        document.getElementById('name').value = guestId.replace(/_/g, ' ');
-        document.getElementById('qr-welcome').style.display = 'block';
-    }
-    setLang('en');
-    startSlider('church');
-    startSlider('venue');
-});
-
-document.getElementById('rsvp-form').addEventListener('submit', e => {
-    e.preventDefault();
-    const btn = document.getElementById('btn-submit');
-    btn.innerText = "Sending...";
-    btn.disabled = true;
-    fetch('YOUR_SCRIPT_URL', { method: 'POST', body: new FormData(e.target) })
-        .then(() => {
-            document.getElementById('form-message').innerText = "Sent! Thank you.";
-            btn.style.display = 'none';
-        })
-        .catch(() => {
-            document.getElementById('form-message').innerText = "Error. Please try again.";
-            btn.disabled = false;
-        });
 });
