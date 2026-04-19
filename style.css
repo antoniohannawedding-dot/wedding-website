@@ -1,20 +1,11 @@
-/* 1. VARIABLES & FONTS */
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap');
-
 :root {
     --primary: #7d9081;
-    /* Sage Green */
     --primary-dark: #5c6e60;
     --accent: #e8dcc4;
-    /* Champagne Gold */
     --bg-main: #FAF9F6;
-    /* Off-white Pearl */
     --bg-card: #FFFFFF;
-    --text-dark: #333333;
-    --text-light: #666666;
 }
 
-/* 2. GLOBAL RESET */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -24,9 +15,8 @@
 body {
     font-family: 'Montserrat', sans-serif;
     background-color: var(--bg-main);
-    color: var(--text-dark);
+    color: #333;
     line-height: 1.6;
-    scroll-behavior: smooth;
 }
 
 h1,
@@ -36,7 +26,6 @@ h3,
     font-family: 'Playfair Display', serif;
 }
 
-/* 3. LANGUAGE SWITCHER (Fixed Top Right) */
 .lang-switcher {
     position: fixed;
     top: 20px;
@@ -47,16 +36,12 @@ h3,
 }
 
 .lang-switcher button {
-    background: rgba(255, 255, 255, 0.9);
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    color: var(--text-dark);
-    padding: 8px 14px;
+    background: white;
+    border: 1px solid #ddd;
+    padding: 8px 12px;
     border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(5px);
+    transition: 0.3s;
 }
 
 .lang-switcher button:hover {
@@ -64,11 +49,9 @@ h3,
     color: white;
 }
 
-/* 4. HERO SECTION */
 .hero-section {
     height: 100vh;
-    background: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)),
-        url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1920&q=80') center/cover fixed;
+    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1920&q=80') center/cover fixed;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -77,81 +60,51 @@ h3,
 }
 
 .hero-content h1 {
-    font-size: clamp(3rem, 10vw, 5rem);
-    margin-bottom: 10px;
-    letter-spacing: 2px;
+    font-size: 4.5rem;
 }
 
-.hero-content .date {
-    font-size: 1.8rem;
-    letter-spacing: 4px;
-    color: var(--accent);
-}
-
-/* 5. CONTENT SECTIONS */
 .content-section {
-    padding: 100px 20px;
+    padding: 80px 20px;
     max-width: 1100px;
     margin: 0 auto;
     text-align: center;
 }
 
-.bg-light {
-    background-color: white;
-    max-width: 100%;
-}
-
-.section-title {
-    font-size: 2.5rem;
-    color: var(--primary);
-    margin-bottom: 60px;
-    position: relative;
-}
-
-.section-title::after {
-    content: '';
-    position: absolute;
-    bottom: -15px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 50px;
-    height: 2px;
-    background: var(--accent);
-}
-
-/* 6. GRID & CARDS */
 .grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 40px;
+    gap: 30px;
 }
 
 .card {
     background: var(--bg-card);
     border-radius: 15px;
     overflow: hidden;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
     text-align: left;
-    transition: transform 0.3s ease;
 }
 
-.card:hover {
-    transform: translateY(-5px);
-}
-
-/* 7. AUTO-SCROLLING GALLERY */
+/* FIXED GALLERY */
 .gallery {
-    display: flex;
+    display: flex !important;
+    flex-direction: row !important;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
+    background: #eee;
     height: 300px;
-    background: #f0f0f0;
+    width: 100%;
 }
 
-/* Hide scrollbar by default, show on hover */
+.gallery img {
+    flex: 0 0 100%;
+    min-width: 100%;
+    scroll-snap-align: start;
+    object-fit: cover;
+}
+
 .gallery::-webkit-scrollbar {
-    height: 5px;
+    height: 6px;
     display: none;
 }
 
@@ -164,164 +117,66 @@ h3,
     border-radius: 10px;
 }
 
-.gallery img {
-    flex: 0 0 100%;
-    scroll-snap-align: start;
-    object-fit: cover;
-    pointer-events: none;
-    /* Allows scrolling through image */
-}
-
-/* 8. CARD CONTENT & HISTORY */
 .card-content {
-    padding: 30px;
-}
-
-.card-content h3 {
-    color: var(--primary-dark);
-    margin-bottom: 10px;
+    padding: 25px;
 }
 
 .btn-history {
     background: none;
     border: 1px solid var(--primary);
     color: var(--primary);
-    padding: 6px 14px;
+    padding: 5px 12px;
     border-radius: 4px;
     cursor: pointer;
+    margin: 10px 0;
     font-size: 0.8rem;
-    margin: 15px 0;
-    font-family: 'Montserrat', sans-serif;
-    transition: 0.3s;
-}
-
-.btn-history:hover {
-    background: var(--primary);
-    color: white;
 }
 
 .history-content {
     display: none;
-    /* Toggled by JS */
     padding: 15px;
-    background: #f9f9f9;
-    border-left: 3px solid var(--primary);
+    background: #f8f8f8;
     font-size: 0.9rem;
-    margin-bottom: 20px;
-    color: var(--text-light);
-    animation: fadeIn 0.5s;
+    border-left: 3px solid var(--primary);
+    margin-bottom: 15px;
 }
 
-/* 9. MAPS */
 .map-container {
-    width: 100%;
-    border-radius: 10px;
+    border-radius: 8px;
     overflow: hidden;
-    margin-top: 10px;
-    border: 1px solid #eee;
+    margin-top: 15px;
+    border: 1px solid #ddd;
 }
 
-.map-container iframe {
-    display: block;
-}
-
-/* 10. GIFTS SECTION */
-.gifts-content {
-    max-width: 700px;
-    margin: 0 auto;
-}
-
-.iban-box {
-    margin-top: 30px;
-    padding: 25px;
-    background: var(--bg-main);
-    border: 1px dashed var(--primary);
-    border-radius: 12px;
-    font-size: 1.1rem;
-    word-break: break-all;
-}
-
-/* 11. RSVP FORM */
 #rsvp-form {
     max-width: 500px;
     margin: 0 auto;
     background: white;
     padding: 40px;
-    border-radius: 15px;
+    border-radius: 12px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-    text-align: left;
 }
 
 .form-group {
     margin-bottom: 20px;
-}
-
-label {
-    display: block;
-    font-weight: 500;
-    margin-bottom: 8px;
-    color: var(--primary-dark);
+    text-align: left;
 }
 
 input,
 select {
     width: 100%;
-    padding: 14px;
+    padding: 12px;
     border: 1px solid #ddd;
-    border-radius: 8px;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 1rem;
+    border-radius: 6px;
 }
 
 button[type="submit"] {
     width: 100%;
-    padding: 16px;
-    background-color: var(--primary);
+    padding: 15px;
+    background: var(--primary);
     color: white;
     border: none;
-    border-radius: 8px;
-    font-size: 1.1rem;
-    font-weight: 500;
+    border-radius: 6px;
     cursor: pointer;
-    transition: 0.3s;
-}
-
-button[type="submit"]:hover {
-    background-color: var(--primary-dark);
-}
-
-.welcome-message {
-    font-weight: 600;
-    color: var(--primary);
-    font-size: 1.2rem;
-    margin-bottom: 20px;
-}
-
-/* ANIMATIONS */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* RESPONSIVE TWEAKS */
-@media (max-width: 600px) {
-    .hero-content h1 {
-        font-size: 3rem;
-    }
-
-    .content-section {
-        padding: 60px 20px;
-    }
-
-    .lang-switcher {
-        top: 10px;
-        right: 10px;
-    }
+    font-size: 1rem;
 }

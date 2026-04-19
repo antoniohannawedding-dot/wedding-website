@@ -4,12 +4,12 @@ const translations = {
         locTitle: "The Day",
         churchTitle: "The Ceremony",
         churchDesc: "Santa Maria della Pietà. Starting at 4:00 PM.",
-        churchHistory: "A 17th-century Sicilian Baroque masterpiece in the Kalsa district, designed by Giacomo Amato. It stands on the historical site of an ancient 15th-century monastery.",
+        churchHistory: "A 17th-century Sicilian Baroque masterpiece in the Kalsa district, designed by Giacomo Amato.",
         venueTitle: "The Party",
         venueDesc: "Baglio Culluzia, Via Funnuta 9. Dinner and dancing to follow.",
-        venueHistory: "An 18th-century noble estate in the Conca d'Oro. Its grand halls, once historic stables, have been elegantly restored to preserve the authentic Sicilian charm.",
+        venueHistory: "An 18th-century noble estate in the Conca d'Oro. Its halls are restored historic stables.",
         giftsTitle: "Gifts & Registry",
-        giftsDesc: "Your presence is the greatest gift. If you wish to contribute to our honeymoon, you can use the details below:",
+        giftsDesc: "Your presence is the greatest gift. If you wish to contribute to our honeymoon, use the details below:",
         rsvpTitle: "RSVP",
         labelName: "Full Name",
         labelAttending: "Will you join us?",
@@ -24,12 +24,12 @@ const translations = {
         locTitle: "Il Grande Giorno",
         churchTitle: "La Cerimonia",
         churchDesc: "Santa Maria della Pietà. Inizio ore 16:00.",
-        churchHistory: "Capolavoro del barocco siciliano del XVII secolo nel quartiere Kalsa, progettato da Giacomo Amato sui resti di un monastero del 1495.",
+        churchHistory: "Capolavoro del barocco siciliano del XVII secolo nel quartiere Kalsa, progettato da Giacomo Amato.",
         venueTitle: "Il Ricevimento",
         venueDesc: "Baglio Culluzia, Via Funnuta 9. Seguiranno cena e balli.",
-        venueHistory: "Dimora nobiliare del 1700 situata nella Conca d'Oro. Le sale, antiche scuderie, sono state ristrutturate mantenendo intatto il fascino dell'epoca.",
+        venueHistory: "Dimora nobiliare del 1700 situata nella Conca d'Oro con antiche scuderie ristrutturate.",
         giftsTitle: "Lista Nozze",
-        giftsDesc: "La vostra presenza è il dono più grande. Se desiderate contribuire alla nostra luna di miele, ecco i dettagli:",
+        giftsDesc: "La vostra presenza è il dono più grande. Se desiderate contribuire alla luna di miele:",
         rsvpTitle: "Conferma Presenza",
         labelName: "Nome Completo",
         labelAttending: "Ci sarai?",
@@ -44,12 +44,12 @@ const translations = {
         locTitle: "Nasz Dzień",
         churchTitle: "Ceremonia",
         churchDesc: "Santa Maria della Pietà. Początek o 16:00.",
-        churchHistory: "XVII-wieczne arcydzieło sycylijskiego baroku w dzielnicy Kalsa, zaprojektowane przez Giacomo Amato w miejscu dawnego klasztoru.",
+        churchHistory: "XVII-wieczne arcydzieło sycylijskiego baroku w dzielnicy Kalsa.",
         venueTitle: "Wesele",
         venueDesc: "Baglio Culluzia, ul. Funnuta 9. Zapraszamy na kolację i tańce.",
-        venueHistory: "XVIII-wieczna szlachecka posiadłość. Jej sale, niegdyś historyczne stajnie, zostały odrestaurowane z zachowaniem autentycznego sycylijskiego uroku.",
+        venueHistory: "XVIII-wieczna szlachecka posiadłość w Conca d'Oro.",
         giftsTitle: "Prezenty",
-        giftsDesc: "Wasza obecność jest dla nas najważniejsza. Jeśli chcecie wesprzeć naszą podróż poślubną, oto szczegóły:",
+        giftsDesc: "Wasza obecność jest najważniejsza. Jeśli chcecie wesprzeć naszą podróż:",
         rsvpTitle: "RSVP",
         labelName: "Imię i Nazwisko",
         labelAttending: "Czy będziesz z nami?",
@@ -91,73 +91,39 @@ function toggleHistory(id) {
     div.style.display = (div.style.display === 'block') ? 'none' : 'block';
 }
 
-window.onload = () => {
+// SLIDER LOGIC
+let sliders = { church: { int: null, idx: 0 }, venue: { int: null, idx: 0 } };
+
+function startSlider(id) {
+    const el = document.getElementById('gallery-' + id);
+    const count = el.querySelectorAll('img').length;
+    sliders[id].int = setInterval(() => {
+        sliders[id].idx = (sliders[id].idx + 1) % count;
+        el.scrollTo({ left: el.clientWidth * sliders[id].idx, behavior: 'smooth' });
+    }, 3000);
+}
+
+function stopSlider(id) { clearInterval(sliders[id].int); }
+
+window.addEventListener('load', () => {
     const urlParams = new URLSearchParams(window.location.search);
     const guestId = urlParams.get('guestId');
     if (guestId) {
         document.getElementById('guest-id').value = guestId;
         document.getElementById('name').value = guestId.replace(/_/g, ' ');
-        const welcomeText = document.getElementById('qr-welcome');
-        welcomeText.style.display = 'block';
-        welcomeText.innerText = translations[currentLang].qrMatch + guestId.replace(/_/g, ' ') + "!";
+        document.getElementById('qr-welcome').innerText = translations[currentLang].qrMatch + guestId.replace(/_/g, ' ') + "!";
+        document.getElementById('qr-welcome').style.display = 'block';
     }
+    startSlider('church');
+    startSlider('venue');
     setLang('en');
-};
+});
 
-const form = document.getElementById('rsvp-form');
-form.addEventListener('submit', e => {
+document.getElementById('rsvp-form').addEventListener('submit', e => {
     e.preventDefault();
     const btn = document.getElementById('btn-submit');
     btn.innerText = "Sending...";
-    btn.disabled = true;
-
-    // IMPORTANT: Replace this with your Google Apps Script URL
-    const scriptURL = 'YOUR_GOOGLE_SCRIPT_WEB_APP_URL';
-
-    fetch(scriptURL, { method: 'POST', body: new FormData(form) })
-        .then(response => {
-            document.getElementById('form-message').innerText = "Success! Thank you.";
-            btn.style.display = 'none';
-        })
-        .catch(error => {
-            document.getElementById('form-message').innerText = "Error. Please try again.";
-            btn.disabled = false;
-            btn.innerText = translations[currentLang].btnSubmit;
-        });
+    // Replace with your URL
+    fetch('YOUR_SCRIPT_URL', { method: 'POST', body: new FormData(e.target) })
+        .then(() => { document.getElementById('form-message').innerText = "Sent!"; btn.style.display = 'none'; });
 });
-
-// --- Gallery Slider Logic ---
-let sliders = {
-    church: { interval: null, index: 0 },
-    venue: { interval: null, index: 0 }
-};
-
-function startSlider(id) {
-    const gallery = document.getElementById('gallery-' + id);
-    const images = gallery.querySelectorAll('img');
-
-    sliders[id].interval = setInterval(() => {
-        sliders[id].index++;
-        if (sliders[id].index >= images.size) {
-            sliders[id].index = 0;
-        }
-
-        // Smoothly scroll to the next image
-        gallery.scrollTo({
-            left: gallery.offsetWidth * sliders[id].index,
-            behavior: 'smooth'
-        });
-    }, 3000); // Change image every 3 seconds
-}
-
-function stopSlider(id) {
-    clearInterval(sliders[id].interval);
-}
-
-// Update the window.onload to start sliders automatically
-const originalOnLoad = window.onload;
-window.onload = () => {
-    if (originalOnLoad) originalOnLoad();
-    startSlider('church');
-    startSlider('venue');
-};
