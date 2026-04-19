@@ -1,7 +1,7 @@
 // --- 1. Multi-Language Dictionary ---
 const translations = {
     en: {
-        title: "Welcome to Our Wedding",
+        title: "Welcome to YOYO Our Wedding",
         locTitle: "Locations",
         churchTitle: "The Church",
         churchDesc: "St. Mary's Cathedral, 123 Wedding Ave.",
