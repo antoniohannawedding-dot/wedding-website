@@ -34,25 +34,51 @@
 
         <div class="grid">
             <div class="card">
-                <img src="st_m_pieta.jpg" alt="Church Santa Maria Della Pietà">
+                <div class="gallery">
+                    <img src="st_m_pieta.jpg" alt="Church Santa Maria Della Pietà">
+                    <img src="https://images.unsplash.com/photo-1548625361-ec8587dcb2d6?auto=format&fit=crop&w=800&q=80"
+                        alt="Church Interior">
+                </div>
                 <div class="card-content">
                     <h3 id="church-title">The Ceremony</h3>
-                    <p id="church-desc">Santa Maria della Pietà (Piazzetta della Pietà, SNC, 90133 Palermo PA, Italia). Starting at 4:00 PM.</p>
+                    <p id="church-desc">Santa Maria della Pietà. Starting at 4:00 PM.</p>
+
+                    <button class="btn-history" id="btn-hist-church" onclick="toggleHistory('church')">View
+                        History</button>
+                    <div id="history-church" class="history-content">
+                        <p id="church-history-text"></p>
+                    </div>
+
                     <div class="map-container">
                         <iframe
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3152.48318469389!2d13.369796076587607!3d38.11718049213568!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1319e52edf188e8b%3A0x58413da94c6faeb6!2sSanta%20Maria%20della%20Piet%C3%A0!5e0!3m2!1sen!2sit!4v1700000000000!5m2!1sen!2sit"
-                            width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy"
-                            referrerpolicy="no-referrer-when-downgrade">
-                        </iframe>
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3152.483935294576!2d13.368864076594875!3d38.1147047921503!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1319e52edf18ce8d%3A0x58413da94c6faeb6!2sSanta%20Maria%20della%20Piet%C3%A0!5e0!3m2!1sen!2sit!4v1700000000000"
+                            width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
                     </div>
                 </div>
             </div>
+
             <div class="card">
-                <img src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&w=800&q=80"
-                    alt="Venue Placeholder">
+                <div class="gallery">
+                    <img src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&w=800&q=80"
+                        alt="Baglio Culluzia">
+                    <img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=800&q=80"
+                        alt="Baglio Detail">
+                </div>
                 <div class="card-content">
                     <h3 id="venue-title">The Party</h3>
-                    <p id="venue-desc">Grand Villa Resort, 456 Celebration St. Dinner and dancing to follow.</p>
+                    <p id="venue-desc">Baglio Culluzia, Via Funnuta 9. Dinner and dancing to follow.</p>
+
+                    <button class="btn-history" id="btn-hist-venue" onclick="toggleHistory('venue')">View
+                        History</button>
+                    <div id="history-venue" class="history-content">
+                        <p id="venue-history-text"></p>
+                    </div>
+
+                    <div class="map-container">
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.844331046187!2d13.398059076593452!3d38.08564119398463!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1319e4f06ffda1c1%3A0xdeadbeef!2sBaglio%20Culluzia!5e0!3m2!1sen!2sit!4v1700000000000"
+                            width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    </div>
                 </div>
             </div>
         </div>
@@ -61,8 +87,7 @@
     <section id="presents" class="content-section bg-light">
         <h2 class="section-title" id="gifts-title">Gifts & Registry</h2>
         <div class="gifts-content">
-            <p id="gifts-desc">Your presence is the greatest gift. If you wish to contribute to our honeymoon, you can
-                use the details below:</p>
+            <p id="gifts-desc"></p>
             <div class="iban-box">
                 <strong>IBAN:</strong> IT12 A345 6789 0123 4567 8901 234
             </div>
@@ -72,24 +97,20 @@
     <section id="rsvp-section" class="content-section">
         <h2 class="section-title" id="rsvp-title">RSVP</h2>
         <p id="qr-welcome" class="welcome-message"></p>
-
         <form id="rsvp-form">
             <input type="hidden" id="guest-id" name="guestId">
-
             <div class="form-group">
                 <label id="label-name" for="name">Full Name</label>
-                <input type="text" id="name" name="name" required placeholder="Mario Rossi">
+                <input type="text" id="name" name="name" required>
             </div>
-
             <div class="form-group">
                 <label id="label-attending" for="attending">Will you join us?</label>
                 <select id="attending" name="attending" required>
-                    <option value="" disabled selected>Select an option...</option>
-                    <option value="yes" id="opt-yes">Yes, I'll be there!</option>
-                    <option value="no" id="opt-no">No, I can't make it</option>
+                    <option value="" disabled selected id="opt-select">Select...</option>
+                    <option value="yes" id="opt-yes">Yes!</option>
+                    <option value="no" id="opt-no">No</option>
                 </select>
             </div>
-
             <button type="submit" id="btn-submit">Confirm RSVP</button>
             <p id="form-message"></p>
         </form>
