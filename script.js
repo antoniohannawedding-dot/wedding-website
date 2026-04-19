@@ -91,12 +91,19 @@ function toggleHistory(id) {
     div.style.display = (div.style.display === 'block') ? 'none' : 'block';
 }
 
-// SLIDER LOGIC
-let sliders = { church: { int: null, idx: 0 }, venue: { int: null, idx: 0 } };
+// ROBUST SLIDER LOGIC
+let sliders = {
+    church: { int: null, idx: 0 },
+    venue: { int: null, idx: 0 }
+};
 
 function startSlider(id) {
     const el = document.getElementById('gallery-' + id);
+    if (!el) return;
     const count = el.querySelectorAll('img').length;
+    if (count <= 1) return;
+
+    clearInterval(sliders[id].int);
     sliders[id].int = setInterval(() => {
         sliders[id].idx = (sliders[id].idx + 1) % count;
         el.scrollTo({ left: el.clientWidth * sliders[id].idx, behavior: 'smooth' });
@@ -104,6 +111,13 @@ function startSlider(id) {
 }
 
 function stopSlider(id) { clearInterval(sliders[id].int); }
+
+window.addEventListener('resize', () => {
+    ['church', 'venue'].forEach(id => {
+        const el = document.getElementById('gallery-' + id);
+        if (el) el.scrollTo({ left: el.clientWidth * sliders[id].idx });
+    });
+});
 
 window.addEventListener('load', () => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -123,7 +137,8 @@ document.getElementById('rsvp-form').addEventListener('submit', e => {
     e.preventDefault();
     const btn = document.getElementById('btn-submit');
     btn.innerText = "Sending...";
-    // Replace with your URL
+    btn.disabled = true;
     fetch('YOUR_SCRIPT_URL', { method: 'POST', body: new FormData(e.target) })
-        .then(() => { document.getElementById('form-message').innerText = "Sent!"; btn.style.display = 'none'; });
+        .then(() => { document.getElementById('form-message').innerText = "Sent!"; btn.style.display = 'none'; })
+        .catch(() => { document.getElementById('form-message').innerText = "Error!"; btn.disabled = false; });
 });

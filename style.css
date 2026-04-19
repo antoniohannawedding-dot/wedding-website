@@ -42,6 +42,7 @@ h3,
     border-radius: 20px;
     cursor: pointer;
     transition: 0.3s;
+    font-weight: 500;
 }
 
 .lang-switcher button:hover {
@@ -60,7 +61,7 @@ h3,
 }
 
 .hero-content h1 {
-    font-size: 4.5rem;
+    font-size: clamp(2.5rem, 8vw, 4.5rem);
 }
 
 .content-section {
@@ -84,11 +85,11 @@ h3,
     text-align: left;
 }
 
-/* FIXED GALLERY */
+/* REPAIRED GALLERY CSS */
 .gallery {
     display: flex !important;
     flex-direction: row !important;
-    overflow-x: auto;
+    overflow-x: hidden;
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
     background: #eee;
@@ -96,20 +97,20 @@ h3,
     width: 100%;
 }
 
+.gallery:hover {
+    overflow-x: auto;
+}
+
 .gallery img {
     flex: 0 0 100%;
     min-width: 100%;
+    height: 100%;
     scroll-snap-align: start;
     object-fit: cover;
 }
 
 .gallery::-webkit-scrollbar {
     height: 6px;
-    display: none;
-}
-
-.card:hover .gallery::-webkit-scrollbar {
-    display: block;
 }
 
 .gallery::-webkit-scrollbar-thumb {
@@ -130,6 +131,11 @@ h3,
     cursor: pointer;
     margin: 10px 0;
     font-size: 0.8rem;
+}
+
+.btn-history:hover {
+    background: var(--primary);
+    color: white;
 }
 
 .history-content {
