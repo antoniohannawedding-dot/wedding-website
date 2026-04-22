@@ -1,6 +1,6 @@
 // 1. CONFIGURATION
 // Replace this with the URL you got from "Deploy > New Deployment" in Google Apps Script
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzVuo3xqCosSLs9ybj0n3fcsPV4Rte5CvUNop8nSlv-BFrMkT59UZCrSFbdyIRHq8m5-Q/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw2ilXL5oQb1Mj6ZnS1pqoQ_3lDv-TlcmNdU3jrL6JFLRkXecWzRI6aC_wplhcjWNntVg/exec';
 const translations = {
     en: {
         subtitle: "Are getting married",
@@ -182,19 +182,32 @@ function renderFamilyForm(family) {
     container.innerHTML = '';
 
     family.forEach((person, index) => {
+        // Check if they already have a response saved in the backend
+        const isYes = person.attending === true || person.attending === "true" || person.attending === "Yes";
+        const isNo = person.attending === false || person.attending === "false" || person.attending === "No";
+        const pastIntol = person.intolerances || "";
+
         const personDiv = document.createElement('div');
         personDiv.className = 'form-group';
         personDiv.style.borderBottom = "1px solid #eee";
         personDiv.style.paddingBottom = "20px";
         personDiv.style.marginBottom = "20px";
         personDiv.innerHTML = `
-            <h4 style="font-family:'Playfair Display', serif; margin-bottom: 10px; color: var(--primary-dark);">${person.name}</h4>
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                <input type="checkbox" id="attend-${index}" style="width: 20px; height: 20px;">
-                <label for="attend-${index}" style="margin-bottom: 0;">${t.optYes}</label>
+            <h4 style="font-family:'Playfair Display', serif; margin-bottom: 15px; color: var(--primary-dark);">${person.name}</h4>
+            
+            <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;">
+                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 0.95rem;">
+                    <input type="radio" name="attend-${index}" id="attend-yes-${index}" value="yes" ${isYes ? 'checked' : ''} required style="width: 18px; height: 18px;">
+                    ${t.optYes}
+                </label>
+                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 0.95rem;">
+                    <input type="radio" name="attend-${index}" id="attend-no-${index}" value="no" ${isNo ? 'checked' : ''} required style="width: 18px; height: 18px;">
+                    ${t.optNo}
+                </label>
             </div>
-            <label style="font-size: 0.8rem; color: #666;">${t.dietLabel}</label>
-            <input type="text" id="intol-${index}" placeholder="${t.dietPlaceholder}">
+
+            <label style="font-size: 0.85rem; color: #666; margin-bottom: 8px;">${t.dietLabel}</label>
+            <input type="text" id="intol-${index}" placeholder="${t.dietPlaceholder}" value="${pastIntol}">
         `;
         container.appendChild(personDiv);
     });
@@ -202,18 +215,23 @@ function renderFamilyForm(family) {
 
 // 5. RSVP SUBMISSION
 document.getElementById('rsvp-form').addEventListener('submit', e => {
-    e.preventDefault();
+    e.preventDefault(); // The browser's native 'required' check happens before this
     const btn = document.getElementById('btn-submit');
     const t = translations[currentLang];
     btn.innerText = "...";
     btn.disabled = true;
 
-    const responses = currentFamilyData.map((person, index) => ({
-        row: person.row,
-        name: person.name,
-        attending: document.getElementById(`attend-${index}`).checked,
-        intolerances: document.getElementById(`intol-${index}`).value
-    }));
+    const responses = currentFamilyData.map((person, index) => {
+        // We only need to check if 'Yes' is selected. If not, it means 'No' (since it's required).
+        const isAttending = document.getElementById(`attend-yes-${index}`).checked;
+
+        return {
+            row: person.row,
+            name: person.name,
+            attending: isAttending,
+            intolerances: document.getElementById(`intol-${index}`).value
+        };
+    });
 
     fetch(SCRIPT_URL, {
         method: 'POST',
