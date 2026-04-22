@@ -1,10 +1,10 @@
 // 1. CONFIGURATION
 // Replace this with the URL you got from "Deploy > New Deployment" in Google Apps Script
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwJ_uiKs-OGsgULvSv2SXEsXAP6lADfJEU7mLiq7En9bhsauU4hHXLqLDfC4bAzs0-uHQ/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzVuo3xqCosSLs9ybj0n3fcsPV4Rte5CvUNop8nSlv-BFrMkT59UZCrSFbdyIRHq8m5-Q/exec';
 const translations = {
     en: {
         subtitle: "Are getting married",
-        locTitle: "The Day",
+        locTitle: "Our Day",
         churchTitle: "The Ceremony",
         churchDesc: "Santa Maria della Pietà. Starting at 4:00 PM.",
         churchHistory: "The Church of Santa Maria della Pietà is a splendid example of Baroque architecture located in the heart of the Kalsa district in Palermo.",
@@ -14,6 +14,7 @@ const translations = {
         giftsTitle: "Gifts & Registry",
         giftsDesc: "Your presence is the greatest gift. If you wish to contribute to our honeymoon, use the details below:",
         rsvpTitle: "RSVP",
+        contactTitle: "Contact Us",
         optYes: "Yes, I'll be there!",
         optNo: "No, I can't make it",
         btnSubmit: "Confirm RSVP",
@@ -41,6 +42,7 @@ const translations = {
         giftsTitle: "Lista Nozze",
         giftsDesc: "La vostra presenza è il dono più grande. Se desiderate contribuire alla luna di miele:",
         rsvpTitle: "Conferma Presenza",
+        contactTitle: "Contattaci",
         optYes: "Sì, ci sarò!",
         optNo: "No, non potrò esserci",
         btnSubmit: "Conferma",
@@ -68,6 +70,7 @@ const translations = {
         giftsTitle: "Prezenty",
         giftsDesc: "Wasza obecność jest najważniejsza. Jeśli chcecie wesprzeć naszą podróż:",
         rsvpTitle: "RSVP",
+        contactTitle: "Kontakt",
         optYes: "Tak, będę!",
         optNo: "Niestety nie mogę",
         btnSubmit: "Potwierdź",
@@ -93,6 +96,7 @@ function setLang(lang) {
     currentLang = lang;
     const t = translations[lang];
 
+    // Main Sections
     document.getElementById('subtitle').innerText = t.subtitle;
     document.getElementById('loc-title').innerText = t.locTitle;
     document.getElementById('church-title').innerText = t.churchTitle;
@@ -104,6 +108,9 @@ function setLang(lang) {
     document.getElementById('gifts-title').innerText = t.giftsTitle;
     document.getElementById('gifts-desc').innerText = t.giftsDesc;
     document.getElementById('rsvp-title').innerText = t.rsvpTitle;
+    document.getElementById('contact-title').innerText = t.contactTitle; // New
+
+    // Buttons & UI
     document.getElementById('btn-submit').innerText = t.btnSubmit;
     document.getElementById('btn-hist-church').innerText = t.btnHist;
     document.getElementById('btn-hist-venue').innerText = t.btnHist;
@@ -122,7 +129,7 @@ function fetchGuestData(guestId) {
     const loadMsg = document.getElementById('loading-message');
     loadMsg.style.display = 'block';
 
-    // Add a cache-busting timestamp (cb=) to ensure fresh data
+    // Cache-busting timestamp ensures fresh data even on mobile browsers
     fetch(SCRIPT_URL + "?guestId=" + guestId + "&cb=" + new Date().getTime())
         .then(response => response.json())
         .then(data => {
@@ -132,6 +139,8 @@ function fetchGuestData(guestId) {
                 return;
             }
             currentFamilyData = data.family;
+
+            // Auto-set language from Sheet preference
             if (data.lang && translations[data.lang]) setLang(data.lang);
 
             loadMsg.style.display = 'none';

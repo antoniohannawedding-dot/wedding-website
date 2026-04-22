@@ -35,7 +35,7 @@
     </header>
 
     <section id="locations" class="content-section">
-        <h2 class="section-title" id="loc-title">The Day</h2>
+        <h2 class="section-title" id="loc-title">Our Day</h2>
         <div class="grid">
             <div class="card" onmouseenter="stopSlider('church')" onmouseleave="startSlider('church')">
                 <div class="gallery" id="gallery-church">
@@ -53,9 +53,11 @@
                         <p id="church-history-text"></p>
                     </div>
                     <div class="map-container">
-                        <iframe
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3151.835434509374!2d13.361!3d38.115!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzjCsDA2JzU0LjAiTiAxM8KwMjEnMzkuNiJF!5e0!3m2!1sen!2sit!4v1625000000000!5m2!1sen!2sit"
-                            width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3152.48318469389!2d13.369796076587607!3d38.11718049213568!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1319e52edf188e8b%3A0x584
+13da94c6faeb6!2sSanta%20Maria%20della%20Piet%C3%A0!5e0!3m2!1sen!2sit!4v1700000000000!5m2!1sen!2sit"
+-                            width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy"
+-                            referrerpolicy="no-referrer-when-downgrade">
+-                        </iframe>
                     </div>
                 </div>
             </div>
@@ -76,8 +78,10 @@
                     </div>
                     <div class="map-container">
                         <iframe
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3151.835434509374!2d13.375!3d38.125!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzjCsDA3JzMwLjAiTiAxM8KwMjInMzAuMCJF!5e0!3m2!1sen!2sit!4v1625000000000!5m2!1sen!2sit"
-                            width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                            src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d12561.488007346992!2d13.411986!3d38.085004!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1319e4f06ffda1c1%3A0x6e5f0736b3cca18a!2sBaglio%20Culluzia!5e0!3m2!1sen!2sus!4v1776721450547!5m2!1sen!2sus"
+                            width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
                     </div>
                 </div>
             </div>
@@ -121,6 +125,37 @@
             <button type="submit" id="btn-submit">Confirm RSVP</button>
             <p id="form-message" style="margin-top: 20px; font-weight: 500;"></p>
         </form>
+    </section>
+
+    <section id="contact-section" class="content-section bg-light">
+        <h2 class="section-title" id="contact-title">Contact Us</h2>
+        <div class="grid">
+            <div class="contact-card">
+                <h3>Hanna</h3>
+                <div class="contact-links">
+                    <a href="tel:+48783985577" class="contact-btn">📞 Call</a>
+                    <a href="https://wa.me/48783985577" target="_blank" class="contact-btn whatsapp">💬 WhatsApp</a>
+                </div>
+            </div>
+            <div class="contact-card">
+                <h3>Antonio</h3>
+                <div class="contact-links">
+                    <a href="tel:+393297853002" class="contact-btn">📞 Call</a>
+                    <a href="https://wa.me/393297853002" target="_blank" class="contact-btn whatsapp">💬 WhatsApp</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="end-signature" class="content-section">
+        <div class="circle-frame">
+            <img src="us_1.png" alt="Hanna & Antonio" id="signature-photo">
+        </div>
+        <p class="playfair-italic" id="can-not-wait" style="margin-top: 20px;"></p>
+        <h1
+            style="font-size: clamp(1.25rem, 4vw, 2rem); color: var(--primary-dark); margin-top: 10px; font-family: 'Playfair Display', serif; font-weight: 400;">
+            Hanna & Antonio
+        </h1>
     </section>
 
     <script src="script.js?v=1.1"></script>
