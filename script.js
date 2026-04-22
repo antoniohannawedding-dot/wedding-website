@@ -15,6 +15,8 @@ const translations = {
         giftsDesc: "Your presence is the greatest gift. If you wish to contribute to our honeymoon, use the details below:",
         rsvpTitle: "RSVP",
         contactTitle: "Contact Us",
+        addCal: "🗓️ Add to Calendar",
+        canNotWait: "We can’t wait to celebrate with you!",
         optYes: "Yes, I'll be there!",
         optNo: "No, I can't make it",
         btnSubmit: "Confirm RSVP",
@@ -43,6 +45,8 @@ const translations = {
         giftsDesc: "La vostra presenza è il dono più grande. Se desiderate contribuire alla luna di miele:",
         rsvpTitle: "Conferma Presenza",
         contactTitle: "Contattaci",
+        addCal: "🗓️ Aggiungi al Calendario",
+        canNotWait: "Non vediamo l'ora di festeggiare con voi!",
         optYes: "Sì, ci sarò!",
         optNo: "No, non potrò esserci",
         btnSubmit: "Conferma",
@@ -69,8 +73,10 @@ const translations = {
         venueHistory: "Baglio Culluzia to XVIII-wieczna rezydencja szlachecka położona na obrzeżach Palermo.",
         giftsTitle: "Prezenty",
         giftsDesc: "Wasza obecność jest najważniejsza. Jeśli chcecie wesprzeć naszą podróż:",
-        rsvpTitle: "RSVP",
+        rsvpTitle: "Prosimy o potwierdzenie przybycia",
         contactTitle: "Kontakt",
+        addCal: "🗓️ Dodaj do Kalendarza",
+        canNotWait: "Nie możemy się doczekać, żeby świętować z Wami!",
         optYes: "Tak, będę!",
         optNo: "Niestety nie mogę",
         btnSubmit: "Potwierdź",
@@ -96,7 +102,7 @@ function setLang(lang) {
     currentLang = lang;
     const t = translations[lang];
 
-    // Main Sections
+    // Text Content
     document.getElementById('subtitle').innerText = t.subtitle;
     document.getElementById('loc-title').innerText = t.locTitle;
     document.getElementById('church-title').innerText = t.churchTitle;
@@ -108,7 +114,8 @@ function setLang(lang) {
     document.getElementById('gifts-title').innerText = t.giftsTitle;
     document.getElementById('gifts-desc').innerText = t.giftsDesc;
     document.getElementById('rsvp-title').innerText = t.rsvpTitle;
-    document.getElementById('contact-title').innerText = t.contactTitle; // New
+    document.getElementById('contact-title').innerText = t.contactTitle;
+    document.getElementById('can-not-wait').innerText = t.canNotWait;
 
     // Buttons & UI
     document.getElementById('btn-submit').innerText = t.btnSubmit;
@@ -117,6 +124,13 @@ function setLang(lang) {
     document.getElementById('btn-copy').innerText = t.btnCopy;
     document.getElementById('copy-confirm').innerText = t.copied;
 
+    // Add to Calendar translation
+    const calText = document.getElementById('add-to-cal-text');
+    if (calText) {
+        // We strip the emoji from the translation string if you only want text updated
+        calText.innerText = t.addCal.replace('🗓️ ', '');
+    }
+
     if (document.getElementById('no-id-text')) document.getElementById('no-id-text').innerText = t.noId;
     if (document.getElementById('btn-manual-go')) document.getElementById('btn-manual-go').innerText = t.btnGo;
     if (document.getElementById('loading-message')) document.getElementById('loading-message').innerText = t.loading;
@@ -124,12 +138,11 @@ function setLang(lang) {
     if (currentFamilyData.length > 0) renderFamilyForm(currentFamilyData);
 }
 
-// 3. FETCHING DATA
+// 3. DATA FETCHING
 function fetchGuestData(guestId) {
     const loadMsg = document.getElementById('loading-message');
     loadMsg.style.display = 'block';
 
-    // Cache-busting timestamp ensures fresh data even on mobile browsers
     fetch(SCRIPT_URL + "?guestId=" + guestId + "&cb=" + new Date().getTime())
         .then(response => response.json())
         .then(data => {
@@ -139,17 +152,13 @@ function fetchGuestData(guestId) {
                 return;
             }
             currentFamilyData = data.family;
-
-            // Auto-set language from Sheet preference
             if (data.lang && translations[data.lang]) setLang(data.lang);
 
             loadMsg.style.display = 'none';
             document.getElementById('manual-id-entry').style.display = 'none';
             document.getElementById('rsvp-form').style.display = 'block';
 
-            const t = translations[currentLang];
-            document.getElementById('qr-welcome').innerText = t.qrMatch + currentFamilyData[0].name + "!";
-            document.getElementById('qr-welcome').style.display = 'block';
+            document.getElementById('qr-welcome').innerText = translations[currentLang].qrMatch + currentFamilyData[0].name + "!";
             renderFamilyForm(currentFamilyData);
         })
         .catch(() => {
@@ -166,7 +175,7 @@ function handleManualId() {
     }
 }
 
-// 4. DYNAMIC FORM
+// 4. FORM RENDERING
 function renderFamilyForm(family) {
     const container = document.getElementById('family-container');
     const t = translations[currentLang];
@@ -191,12 +200,12 @@ function renderFamilyForm(family) {
     });
 }
 
-// 5. SUBMIT RSVP
+// 5. RSVP SUBMISSION
 document.getElementById('rsvp-form').addEventListener('submit', e => {
     e.preventDefault();
     const btn = document.getElementById('btn-submit');
     const t = translations[currentLang];
-    btn.innerText = "Sending...";
+    btn.innerText = "...";
     btn.disabled = true;
 
     const responses = currentFamilyData.map((person, index) => ({
@@ -208,10 +217,8 @@ document.getElementById('rsvp-form').addEventListener('submit', e => {
 
     fetch(SCRIPT_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify({ responses: responses })
     })
-        .then(res => res.json())
         .then(() => {
             document.getElementById('form-message').innerText = t.sent;
             btn.style.display = 'none';
@@ -224,7 +231,7 @@ document.getElementById('rsvp-form').addEventListener('submit', e => {
         });
 });
 
-// 6. UTILS
+// 6. UTILS & ANIMATION
 function copyIban() {
     const text = document.getElementById('iban-text').innerText;
     navigator.clipboard.writeText(text).then(() => {
@@ -233,10 +240,12 @@ function copyIban() {
         setTimeout(() => { toast.style.opacity = '0'; }, 2000);
     });
 }
+
 function toggleHistory(id) {
     const div = document.getElementById('history-' + id);
     div.style.display = (div.style.display === 'block') ? 'none' : 'block';
 }
+
 let sliders = { church: { int: null, idx: 0 }, venue: { int: null, idx: 0 } };
 function startSlider(id) {
     const el = document.getElementById('gallery-' + id);
@@ -250,12 +259,12 @@ function startSlider(id) {
 }
 function stopSlider(id) { clearInterval(sliders[id].int); }
 
-// 7. INIT
+// 7. INITIALIZATION
 window.addEventListener('load', () => {
     const urlParams = new URLSearchParams(window.location.search);
     const guestId = urlParams.get('guestId');
 
-    setLang('en');
+    setLang('en'); // Default
     startSlider('church');
     startSlider('venue');
 
@@ -263,6 +272,5 @@ window.addEventListener('load', () => {
         fetchGuestData(guestId);
     } else {
         document.getElementById('manual-id-entry').style.display = 'block';
-        document.getElementById('no-id-text').innerText = translations[currentLang].noId;
     }
 });
