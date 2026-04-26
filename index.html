@@ -93,7 +93,7 @@
         <div class="gifts-card">
             <p id="gifts-desc"></p>
             <div class="classy-iban">
-                <p class="iban-header">Wire Transfer Details</p>
+                <p class="iban-header">IBAN</p>
                 <div class="iban-wrapper">
                     <span id="iban-text">IT00 0000 0000 0000 0000 0000 000</span>
                     <button class="copy-btn" onclick="copyIban()" id="btn-copy">Copy</button>
@@ -119,13 +119,17 @@
             </div>
         </div>
     
+        <p id="rsvp-deadline" style="font-style: italic; margin-bottom: 20px; font-size: 0.9rem; color: #666;"></p>
         <p id="qr-welcome" class="welcome-message"></p>
         <form id="rsvp-form" style="display: none;">
             <div id="family-container"></div>
             <button type="submit" id="btn-submit">Confirm RSVP</button>
         </form>
         <div id="form-message" style="margin-top: 20px; font-weight: 500;"></div>
-    
+        <p id="more-details-msg" style="margin-top: 30px; font-weight: bold; color: var(--primary-dark);"></p>
+
+        
+
         <div class="calendar-container">
             <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Wedding+of+Hanna+%26+Antonio&dates=20260916T160000/20260917T020000&details=4:00+PM:+Ceremony+at+Santa+Maria+della+Piet%C3%A0%0AFollowed+by+Reception+at+Baglio+Culluzia%0A%0AWe+can%27t+wait+to+celebrate+with+you!&location=Palermo,+Italy"
                 target="_blank" class="cal-btn-luxury">
@@ -166,7 +170,30 @@
         </h1>
     </section>
 
+    <div style="text-align: center; margin: 60px auto; padding: 0 20px;">
+        <a href="https://wa.me/39XXXXXXXXXX" id="wp-link" target="_blank" style="text-decoration: none;">
+            <button type="button" style="
+                background: none; 
+                border: 2px solid var(--primary-dark); 
+                color: var(--primary-dark); 
+                padding: 20px 40px; 
+                border-radius: 40px; 
+                cursor: pointer; 
+                font-family: 'Montserrat', sans-serif; 
+                font-size: 1.15rem; 
+                font-weight: 500; 
+                line-height: 1.6;
+                display: inline-block;
+                max-width: 100%;
+            ">
+                <span id="wp-contact-text"></span>
+            </button>
+        </a>
+    </div>
+
+
     <script src="script.js?v=1.10"></script>
+
 </body>
 
 </html>

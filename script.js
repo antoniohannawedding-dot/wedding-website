@@ -10,9 +10,11 @@ const translations = {
         venueTitle: "The Venue",
         venueDesc: "Baglio Culluzia, Via Funnuta 9.",
         venueHistory: "Baglio Culluzia is an 18th-century noble residence located just outside Palermo.",
-        giftsTitle: "Gifts & Registry",
+        giftsTitle: "Gifts (IBAN coming soon...)",
         giftsDesc: "Your presence is the greatest gift. If you wish to contribute to our honeymoon, use the details below:",
         rsvpTitle: "RSVP",
+        rsvpDeadline: "Please confirm your presence as soon as possible. If your plans change, you can return here to update your response at any time!",
+        moreDetails: "More details are coming soon, so keep an eye on this page!",
         contactTitle: "Contact Us",
         addCal: "🗓️ Add to Calendar",
         canNotWait: "We can’t wait to celebrate with you!",
@@ -22,6 +24,7 @@ const translations = {
         btnHist: "View History",
         btnCopy: "Copy",
         copied: "Copied!",
+        wpContact: "Need help with accommodation? Message our Wedding Planner, Marina Sutera",
         qrMatch: "Welcome, ",
         loading: "Loading your invitation details...",
         dietLabel: "Dietary Restrictions / Intolerances",
@@ -40,9 +43,11 @@ const translations = {
         venueTitle: "Il Ricevimento",
         venueDesc: "Baglio Culluzia, Via Funnuta 9.",
         venueHistory: "Baglio Culluzia è una dimora nobiliare del 1700 situata alle porte di Palermo.",
-        giftsTitle: "Lista Nozze",
+        giftsTitle: "Regali (IBAN prossimamente)",
         giftsDesc: "La vostra presenza è il dono più grande. Se desiderate contribuire alla luna di miele:",
         rsvpTitle: "Conferma Presenza",
+        rsvpDeadline: "Vi preghiamo di confermare la vostra presenza il prima possibile. Se i vostri programmi cambiano, potete tornare qui per aggiornare la risposta in qualsiasi momento!",
+        moreDetails: "Altri dettagli arriveranno presto, tenete d'occhio la pagina!",
         contactTitle: "Contattaci",
         addCal: "🗓️ Aggiungi al Calendario",
         canNotWait: "Non vediamo l'ora di festeggiare con voi!",
@@ -52,6 +57,7 @@ const translations = {
         btnHist: "Vedi Storia",
         btnCopy: "Copia",
         copied: "Copiato!",
+        wpContact: "Serve aiuto per l'alloggio? Scrivi alla nostra Wedding Planner, Marina Sutera",
         qrMatch: "Benvenuto/a, ",
         loading: "Caricamento dettagli invito...",
         dietLabel: "Intolleranze / Restrizioni alimentari",
@@ -70,9 +76,11 @@ const translations = {
         venueTitle: "Przyjęcie Wesele",
         venueDesc: "Baglio Culluzia, ul. Funnuta 9.",
         venueHistory: "Baglio Culluzia to XVIII-wieczna rezydencja szlachecka położona na obrzeżach Palermo.",
-        giftsTitle: "Prezenty",
+        giftsTitle: "Prezenty (IBAN już wkrótce)",
         giftsDesc: "Wasza obecność jest najważniejsza. Jeśli chcecie wesprzeć naszą podróż:",
         rsvpTitle: "Prosimy o potwierdzenie przybycia",
+        rsvpDeadline: "Prosimy o potwierdzenie przybycia jak najszybciej. Jeśli Wasze plany ulegną zmianie, możecie wrócić tutaj i zaktualizować odpowiedź w dowolnym momencie!",
+        moreDetails: "Więcej szczegółów pojawi się wkrótce, więc zaglądajcie na tę stronę!",
         contactTitle: "Kontakt",
         addCal: "🗓️ Dodaj do Kalendarza",
         canNotWait: "Nie możemy się doczekać, żeby świętować z Wami!",
@@ -82,6 +90,7 @@ const translations = {
         btnHist: "Zobacz historię",
         btnCopy: "Kopiuj",
         copied: "Skopiowano!",
+        wpContact: "Potrzebujesz pomocy z zakwaterowaniem? Napisz do naszej Wedding Planner, Marina Sutera",
         qrMatch: "Witaj, ",
         loading: "Ładowanie szczegółów zaproszenia...",
         dietLabel: "Alergie / Intolerancje pokarmowe",
@@ -140,6 +149,9 @@ function setLang(lang) {
     }
 
     if (currentFamilyData.length > 0) renderFamilyForm(currentFamilyData);
+    if (document.getElementById('rsvp-deadline')) document.getElementById('rsvp-deadline').innerText = t.rsvpDeadline;
+    if (document.getElementById('more-details-msg')) document.getElementById('more-details-msg').innerText = t.moreDetails;
+    if (document.getElementById('wp-contact-text')) document.getElementById('wp-contact-text').innerText = t.wpContact;
 }
 
 // 3. DATA FETCHING
