@@ -1,6 +1,5 @@
 // 1. CONFIGURATION
-// Replace this with the URL you got from "Deploy > New Deployment" in Google Apps Script
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw2ilXL5oQb1Mj6ZnS1pqoQ_3lDv-TlcmNdU3jrL6JFLRkXecWzRI6aC_wplhcjWNntVg/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyOPtIHrm8TPNSJzpz78OAoKCwPDaNRsRPHRsPbQQczg2cYSs0jiPyJlFUIK4tmAjDkHg/exec';
 const translations = {
     en: {
         subtitle: "Are getting married",
@@ -127,13 +126,18 @@ function setLang(lang) {
     // Add to Calendar translation
     const calText = document.getElementById('add-to-cal-text');
     if (calText) {
-        // We strip the emoji from the translation string if you only want text updated
         calText.innerText = t.addCal.replace('🗓️ ', '');
     }
 
     if (document.getElementById('no-id-text')) document.getElementById('no-id-text').innerText = t.noId;
     if (document.getElementById('btn-manual-go')) document.getElementById('btn-manual-go').innerText = t.btnGo;
     if (document.getElementById('loading-message')) document.getElementById('loading-message').innerText = t.loading;
+
+    // Update the success message if the form was already sent
+    const msgDiv = document.getElementById('form-message');
+    if (msgDiv && msgDiv.classList.contains('submitted')) {
+        msgDiv.innerText = t.sent;
+    }
 
     if (currentFamilyData.length > 0) renderFamilyForm(currentFamilyData);
 }
@@ -159,6 +163,7 @@ function fetchGuestData(guestId) {
             document.getElementById('rsvp-form').style.display = 'block';
 
             document.getElementById('qr-welcome').innerText = translations[currentLang].qrMatch + currentFamilyData[0].name + "!";
+            document.getElementById('qr-welcome').style.display = 'block';
             renderFamilyForm(currentFamilyData);
         })
         .catch(() => {
@@ -182,7 +187,6 @@ function renderFamilyForm(family) {
     container.innerHTML = '';
 
     family.forEach((person, index) => {
-        // Check if they already have a response saved in the backend
         const isYes = person.attending === true || person.attending === "true" || person.attending === "Yes";
         const isNo = person.attending === false || person.attending === "false" || person.attending === "No";
         const pastIntol = person.intolerances || "";
@@ -194,7 +198,6 @@ function renderFamilyForm(family) {
         personDiv.style.marginBottom = "20px";
         personDiv.innerHTML = `
             <h4 style="font-family:'Playfair Display', serif; margin-bottom: 15px; color: var(--primary-dark);">${person.name}</h4>
-            
             <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;">
                 <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 0.95rem;">
                     <input type="radio" name="attend-${index}" id="attend-yes-${index}" value="yes" ${isYes ? 'checked' : ''} required style="width: 18px; height: 18px;">
@@ -205,7 +208,6 @@ function renderFamilyForm(family) {
                     ${t.optNo}
                 </label>
             </div>
-
             <label style="font-size: 0.85rem; color: #666; margin-bottom: 8px;">${t.dietLabel}</label>
             <input type="text" id="intol-${index}" placeholder="${t.dietPlaceholder}" value="${pastIntol}">
         `;
@@ -215,16 +217,16 @@ function renderFamilyForm(family) {
 
 // 5. RSVP SUBMISSION
 document.getElementById('rsvp-form').addEventListener('submit', e => {
-    e.preventDefault(); // The browser's native 'required' check happens before this
+    e.preventDefault();
     const btn = document.getElementById('btn-submit');
     const t = translations[currentLang];
+    const rsvpForm = document.getElementById('rsvp-form');
+
     btn.innerText = "...";
     btn.disabled = true;
 
     const responses = currentFamilyData.map((person, index) => {
-        // We only need to check if 'Yes' is selected. If not, it means 'No' (since it's required).
         const isAttending = document.getElementById(`attend-yes-${index}`).checked;
-
         return {
             row: person.row,
             name: person.name,
@@ -238,9 +240,17 @@ document.getElementById('rsvp-form').addEventListener('submit', e => {
         body: JSON.stringify({ responses: responses })
     })
         .then(() => {
-            document.getElementById('form-message').innerText = t.sent;
-            btn.style.display = 'none';
-            document.getElementById('family-container').style.display = 'none';
+            rsvpForm.style.display = 'none';
+            document.getElementById('qr-welcome').style.display = 'none';
+
+            const msgDiv = document.getElementById('form-message');
+            msgDiv.classList.add('submitted'); // MARK AS SUBMITTED
+            msgDiv.innerText = t.sent;
+            msgDiv.style.padding = "20px";
+            msgDiv.style.background = "rgba(255,255,255,0.8)";
+            msgDiv.style.borderRadius = "10px";
+            msgDiv.style.fontSize = "1.2rem";
+            msgDiv.style.color = "var(--primary-dark)";
         })
         .catch(() => {
             document.getElementById('form-message').innerText = t.error;
