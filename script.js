@@ -1,5 +1,5 @@
 // 1. CONFIGURATION
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyOPtIHrm8TPNSJzpz78OAoKCwPDaNRsRPHRsPbQQczg2cYSs0jiPyJlFUIK4tmAjDkHg/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw_wRE_CyaEwCupLLKonVBr1725Wi9UQyfY-Xz4zVu_OO0ZcPGcrAAtB5iGUIZtyf4dSA/exec';
 const translations = {
     en: {
         subtitle: "Are getting married",
@@ -25,7 +25,6 @@ const translations = {
         btnCopy: "Copy",
         copied: "Copied!",
         wpContact: "Need help with accommodation? Message our Wedding Planner, Marina Sutera",
-        qrMatch: "Welcome, ",
         loading: "Loading your invitation details...",
         dietLabel: "Dietary Restrictions / Intolerances",
         dietPlaceholder: "e.g., Gluten-free, Peanuts, None",
@@ -58,7 +57,6 @@ const translations = {
         btnCopy: "Copia",
         copied: "Copiato!",
         wpContact: "Serve aiuto per l'alloggio? Scrivi alla nostra Wedding Planner, Marina Sutera",
-        qrMatch: "Benvenuto/a, ",
         loading: "Caricamento dettagli invito...",
         dietLabel: "Intolleranze / Restrizioni alimentari",
         dietPlaceholder: "es. Glutine, Lattosio, Nessuna",
@@ -73,7 +71,7 @@ const translations = {
         churchTitle: "Ceremonia",
         churchDesc: "Santa Maria della Pietà. Początek o 16:00.",
         churchHistory: "Kościół Santa Maria della Pietà to wspaniały przykład architektury barokowej w sercu dzielnicy Kalsa w Palermo.",
-        venueTitle: "Przyjęcie Wesele",
+        venueTitle: "Wesele",
         venueDesc: "Baglio Culluzia, ul. Funnuta 9.",
         venueHistory: "Baglio Culluzia to XVIII-wieczna rezydencja szlachecka położona na obrzeżach Palermo.",
         giftsTitle: "Prezenty (IBAN już wkrótce)",
@@ -91,7 +89,6 @@ const translations = {
         btnCopy: "Kopiuj",
         copied: "Skopiowano!",
         wpContact: "Potrzebujesz pomocy z zakwaterowaniem? Napisz do naszej Wedding Planner, Marina Sutera",
-        qrMatch: "Witaj, ",
         loading: "Ładowanie szczegółów zaproszenia...",
         dietLabel: "Alergie / Intolerancje pokarmowe",
         dietPlaceholder: "np. gluten, orzechy, brak",
@@ -104,13 +101,34 @@ const translations = {
 
 let currentLang = 'en';
 let currentFamilyData = [];
+let currentInviteName = "";
 
-// 2. LANGUAGE LOGIC
+// DYNAMIC GREETING LOGIC
+function updateWelcomeMessage() {
+    if (!currentInviteName) return;
+    const size = currentFamilyData.length;
+    const el = document.getElementById('qr-welcome');
+    let msg = "";
+
+    if (currentLang === 'it') {
+        // Size > 1 means multiple people (Family/Couple)
+        if (size > 1) msg = `Benvenuti, ${currentInviteName}!`;
+        else msg = `Benvenuto/a, ${currentInviteName}!`;
+    } else if (currentLang === 'pl') {
+        if (size > 1) msg = `Witajcie, ${currentInviteName}!`;
+        else msg = `Witaj, ${currentInviteName}!`;
+    } else {
+        msg = `Welcome, ${currentInviteName}!`;
+    }
+
+    el.innerText = msg;
+    el.style.display = 'block';
+}
+
 function setLang(lang) {
     currentLang = lang;
     const t = translations[lang];
 
-    // Text Content
     document.getElementById('subtitle').innerText = t.subtitle;
     document.getElementById('loc-title').innerText = t.locTitle;
     document.getElementById('church-title').innerText = t.churchTitle;
@@ -125,36 +143,34 @@ function setLang(lang) {
     document.getElementById('contact-title').innerText = t.contactTitle;
     document.getElementById('can-not-wait').innerText = t.canNotWait;
 
-    // Buttons & UI
     document.getElementById('btn-submit').innerText = t.btnSubmit;
     document.getElementById('btn-hist-church').innerText = t.btnHist;
     document.getElementById('btn-hist-venue').innerText = t.btnHist;
     document.getElementById('btn-copy').innerText = t.btnCopy;
     document.getElementById('copy-confirm').innerText = t.copied;
 
-    // Add to Calendar translation
     const calText = document.getElementById('add-to-cal-text');
-    if (calText) {
-        calText.innerText = t.addCal.replace('🗓️ ', '');
-    }
+    if (calText) calText.innerText = t.addCal.replace('🗓️ ', '');
 
     if (document.getElementById('no-id-text')) document.getElementById('no-id-text').innerText = t.noId;
     if (document.getElementById('btn-manual-go')) document.getElementById('btn-manual-go').innerText = t.btnGo;
     if (document.getElementById('loading-message')) document.getElementById('loading-message').innerText = t.loading;
 
-    // Update the success message if the form was already sent
     const msgDiv = document.getElementById('form-message');
     if (msgDiv && msgDiv.classList.contains('submitted')) {
         msgDiv.innerText = t.sent;
     }
 
-    if (currentFamilyData.length > 0) renderFamilyForm(currentFamilyData);
+    if (currentFamilyData.length > 0) {
+        renderFamilyForm(currentFamilyData);
+        updateWelcomeMessage();
+    }
+
     if (document.getElementById('rsvp-deadline')) document.getElementById('rsvp-deadline').innerText = t.rsvpDeadline;
     if (document.getElementById('more-details-msg')) document.getElementById('more-details-msg').innerText = t.moreDetails;
     if (document.getElementById('wp-contact-text')) document.getElementById('wp-contact-text').innerText = t.wpContact;
 }
 
-// 3. DATA FETCHING
 function fetchGuestData(guestId) {
     const loadMsg = document.getElementById('loading-message');
     loadMsg.style.display = 'block';
@@ -168,14 +184,18 @@ function fetchGuestData(guestId) {
                 return;
             }
             currentFamilyData = data.family;
-            if (data.lang && translations[data.lang]) setLang(data.lang);
+            currentInviteName = data.inviteName || currentFamilyData[0].name;
+
+            if (data.lang && translations[data.lang]) {
+                setLang(data.lang);
+            } else {
+                updateWelcomeMessage();
+            }
 
             loadMsg.style.display = 'none';
             document.getElementById('manual-id-entry').style.display = 'none';
             document.getElementById('rsvp-form').style.display = 'block';
 
-            document.getElementById('qr-welcome').innerText = translations[currentLang].qrMatch + currentFamilyData[0].name + "!";
-            document.getElementById('qr-welcome').style.display = 'block';
             renderFamilyForm(currentFamilyData);
         })
         .catch(() => {
@@ -192,7 +212,6 @@ function handleManualId() {
     }
 }
 
-// 4. FORM RENDERING
 function renderFamilyForm(family) {
     const container = document.getElementById('family-container');
     const t = translations[currentLang];
@@ -203,13 +222,16 @@ function renderFamilyForm(family) {
         const isNo = person.attending === false || person.attending === "false" || person.attending === "No";
         const pastIntol = person.intolerances || "";
 
+        // Grab strictly the first word of the name
+        const firstNameOnly = person.name.split(' ')[0];
+
         const personDiv = document.createElement('div');
         personDiv.className = 'form-group';
         personDiv.style.borderBottom = "1px solid #eee";
         personDiv.style.paddingBottom = "20px";
         personDiv.style.marginBottom = "20px";
         personDiv.innerHTML = `
-            <h4 style="font-family:'Playfair Display', serif; margin-bottom: 15px; color: var(--primary-dark);">${person.name}</h4>
+            <h4 style="font-family:'Playfair Display', serif; margin-bottom: 15px; color: var(--primary-dark); font-size: 1.2rem;">${firstNameOnly}</h4>
             <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;">
                 <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 0.95rem;">
                     <input type="radio" name="attend-${index}" id="attend-yes-${index}" value="yes" ${isYes ? 'checked' : ''} required style="width: 18px; height: 18px;">
@@ -227,7 +249,6 @@ function renderFamilyForm(family) {
     });
 }
 
-// 5. RSVP SUBMISSION
 document.getElementById('rsvp-form').addEventListener('submit', e => {
     e.preventDefault();
     const btn = document.getElementById('btn-submit');
@@ -256,13 +277,14 @@ document.getElementById('rsvp-form').addEventListener('submit', e => {
             document.getElementById('qr-welcome').style.display = 'none';
 
             const msgDiv = document.getElementById('form-message');
-            msgDiv.classList.add('submitted'); // MARK AS SUBMITTED
+            msgDiv.classList.add('submitted');
             msgDiv.innerText = t.sent;
             msgDiv.style.padding = "20px";
             msgDiv.style.background = "rgba(255,255,255,0.8)";
             msgDiv.style.borderRadius = "10px";
             msgDiv.style.fontSize = "1.2rem";
             msgDiv.style.color = "var(--primary-dark)";
+            msgDiv.style.textAlign = "center";
         })
         .catch(() => {
             document.getElementById('form-message').innerText = t.error;
@@ -271,7 +293,6 @@ document.getElementById('rsvp-form').addEventListener('submit', e => {
         });
 });
 
-// 6. UTILS & ANIMATION
 function copyIban() {
     const text = document.getElementById('iban-text').innerText;
     navigator.clipboard.writeText(text).then(() => {
@@ -299,12 +320,11 @@ function startSlider(id) {
 }
 function stopSlider(id) { clearInterval(sliders[id].int); }
 
-// 7. INITIALIZATION
 window.addEventListener('load', () => {
     const urlParams = new URLSearchParams(window.location.search);
     const guestId = urlParams.get('guestId');
 
-    setLang('en'); // Default
+    setLang('en');
     startSlider('church');
     startSlider('venue');
 
