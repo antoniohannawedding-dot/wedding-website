@@ -20,7 +20,7 @@ body {
     position: relative;
 }
 
-/* FIX FOR MOBILE BACKGROUND: Applies the background to a pseudo-element */
+/* FIX FOR MOBILE BACKGROUND */
 body::before {
     content: "";
     position: fixed;
@@ -42,7 +42,6 @@ h3,
     font-family: 'Playfair Display', serif;
 }
 
-/* NEW: Corinthia font class */
 .corinthia-text {
     font-family: 'Corinthia', cursive;
     font-weight: 700;
@@ -93,7 +92,6 @@ h3,
 
 .hero-content h1 {
     font-size: clamp(4.5rem, 12vw, 8rem);
-    /* Scaled up because Corinthia naturally runs very small */
     margin-bottom: 5px;
     text-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
     line-height: 1;
@@ -122,6 +120,8 @@ h3,
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 40px;
+    align-items: stretch;
+    /* Ensures cards in the same row have equal height */
 }
 
 .card {
@@ -131,6 +131,9 @@ h3,
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
     text-align: left;
     backdrop-filter: blur(5px);
+    /* Added Flexbox to handle internal alignment */
+    display: flex;
+    flex-direction: column;
 }
 
 /* GALLERY */
@@ -138,12 +141,13 @@ h3,
     display: flex !important;
     flex-direction: row !important;
     overflow-x: auto;
-    /* Fixed for mobile scrolling */
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
     background: #f0f0f0;
     height: 320px;
     width: 100%;
+    flex-shrink: 0;
+    /* Prevents the gallery from shrinking */
 }
 
 .gallery img {
@@ -156,6 +160,10 @@ h3,
 
 .card-content {
     padding: 30px;
+    /* Added Flexbox to push the map to the bottom */
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
 }
 
 .btn-history {
@@ -167,6 +175,8 @@ h3,
     cursor: pointer;
     margin: 10px 0;
     font-size: 0.8rem;
+    align-self: flex-start;
+    /* Keeps button from stretching full width */
 }
 
 .btn-history:hover {
@@ -181,6 +191,15 @@ h3,
     font-size: 0.9rem;
     border-left: 3px solid var(--primary);
     margin-bottom: 15px;
+}
+
+.map-container {
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: auto;
+    /* Magic line: Pushes map to the bottom of the card-content */
+    border: 1px solid #eee;
+    flex-shrink: 0;
 }
 
 /* GIFTS SECTION */
@@ -288,13 +307,6 @@ button[type="submit"] {
 
 button[type="submit"]:hover {
     background: var(--primary-dark);
-}
-
-.map-container {
-    border-radius: 10px;
-    overflow: hidden;
-    margin-top: 20px;
-    border: 1px solid #eee;
 }
 
 .welcome-message {

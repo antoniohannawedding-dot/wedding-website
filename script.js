@@ -5,10 +5,10 @@ const translations = {
         subtitle: "Are getting married",
         locTitle: "Our Day",
         churchTitle: "The Ceremony",
-        churchDesc: "Santa Maria della Pietà. Starting at 4:00 PM.",
+        churchDesc: "Santa Maria della Pietà, Piazzetta della Pietà, SNC - 90133 Palermo. Starting at 4:00 PM.",
         churchHistory: "The Church of Santa Maria della Pietà is a splendid example of Baroque architecture located in the heart of the Kalsa district in Palermo.",
         venueTitle: "The Venue",
-        venueDesc: "Baglio Culluzia, Via Funnuta 9.",
+        venueDesc: "Baglio Culluzia, via Funnuta, 9 - 90121 Palermo.",
         venueHistory: "Baglio Culluzia is an 18th-century noble residence located just outside Palermo.",
         giftsTitle: "Gifts (IBAN coming soon...)",
         giftsDesc: "Your presence is the greatest gift. If you wish to contribute to build our future together, feel free to use our IBAN below or drop a cash-gift on the big day:",
@@ -37,10 +37,10 @@ const translations = {
         subtitle: "Si sposano",
         locTitle: "Il Grande Giorno",
         churchTitle: "La Cerimonia",
-        churchDesc: "Santa Maria della Pietà. Inizio ore 16:00.",
+        churchDesc: "Santa Maria della Pietà, Piazzetta della Pietà, SNC - 90133 Palermo. Inizio ore 16:00.",
         churchHistory: "La Chiesa di Santa Maria della Pietà è uno splendido esempio di architettura barocca nel cuore della Kalsa a Palermo.",
         venueTitle: "Il Ricevimento",
-        venueDesc: "Baglio Culluzia, Via Funnuta 9.",
+        venueDesc: "Baglio Culluzia, via Funnuta, 9 - 90121 Palermo.",
         venueHistory: "Baglio Culluzia è una dimora nobiliare del 1700 situata alle porte di Palermo.",
         giftsTitle: "Regali (IBAN prossimamente)",
         giftsDesc: "La vostra presenza è il regalo più grande. Se desiderate contribuire a costruire il nostro futuro insieme, potete utilizzare il nostro IBAN qui sotto o lasciarci un pensiero in busta il giorno del matrimonio:",
@@ -69,10 +69,10 @@ const translations = {
         subtitle: "Biorą ślub",
         locTitle: "Nasz Dzień",
         churchTitle: "Ceremonia",
-        churchDesc: "Santa Maria della Pietà. Początek o 16:00.",
+        churchDesc: "Santa Maria della Pietà, Piazzetta della Pietà, SNC - 90133 Palermo. Początek o 16:00.",
         churchHistory: "Kościół Santa Maria della Pietà to wspaniały przykład architektury barokowej w sercu dzielnicy Kalsa w Palermo.",
         venueTitle: "Wesele",
-        venueDesc: "Baglio Culluzia, ul. Funnuta 9.",
+        venueDesc: "Baglio Culluzia, via Funnuta, 9 - 90121 Palermo.",
         venueHistory: "Baglio Culluzia to XVIII-wieczna rezydencja szlachecka położona na obrzeżach Palermo.",
         giftsTitle: "Prezenty (IBAN już wkrótce)",
         giftsDesc: "Wasza obecność jest dla nas największym prezentem. Jeśli jednak chcielibyście wesprzeć nas w budowaniu wspólnej przyszłości, możecie skorzystać z poniższego numeru IBAN lub przekazać nam upominek gotówkowy w dniu ślubu:",
@@ -112,13 +112,13 @@ function updateWelcomeMessage() {
 
     if (currentLang === 'it') {
         // Size > 1 means multiple people (Family/Couple)
-        if (size > 1) msg = `Benvenuti, ${currentInviteName}!`;
-        else msg = `Benvenuto/a, ${currentInviteName}!`;
+        if (size > 1) msg = `Benvenuti!`;
+        else msg = `Benvenuto/a!`;
     } else if (currentLang === 'pl') {
-        if (size > 1) msg = `Witajcie, ${currentInviteName}!`;
-        else msg = `Witaj, ${currentInviteName}!`;
+        if (size > 1) msg = `Witajcie!`;
+        else msg = `Witaj!`;
     } else {
-        msg = `Welcome, ${currentInviteName}!`;
+        msg = `Welcome!`;
     }
 
     el.innerText = msg;
